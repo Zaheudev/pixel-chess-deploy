@@ -17,15 +17,10 @@ app.set('view engine','ejs');
 app.get("/", indexRouter);
 app.get("/play", indexRouter);
 
-
-//const chess1 = new Chess();
-//console.log(chess1.ascii());
-//chess1.move({ from:'a2', to:'a3' });
-//console.log(chess1.ascii());
-
 const currentGames = new Map(); 
 
 const wsServer = new ws.Server({port:8080});
+/*
 wsServer.on('connection', function(ws) {
   console.log("Connected"+ws);
   let newGame = new Game(new Chess(), ws, randomInt(420));
@@ -36,28 +31,43 @@ wsServer.on('connection', function(ws) {
     console.log(newGame.chess.ascii());
   }
 )})
+*/
 
-
-/*
 wsServer.on("connection", function(ws) {
   if (currentGames.size != 0) {
     for (let game of currentGames) {
-      if (this.wsBlack === null) {
+      if (game.getWsBlack() === null) {
         game.setWsBlack(new WebSocket(randomInt(1000),ws));
-      }else {
-        let newGame = new Game(new Chess(), new WebSocket(randomInt(1000),ws));
-        currentGames.set(newGame.getId(), newGame);
+        //TODO Start game, send messages to players
+        break;
       }
-    }
+    }//TODO if no free games found, create new game
+  }else {
+    let newSocket = new WebSocket(randomInt(1000),ws);
+    let newGame = new Game(new Chess(), newSocket);
+    newSocket.setGame(newGame);
+    currentGames.set(newGame.getId(), newGame);
   }
-}
-)
-*/
+  ws.on("message", function(message) {
+    console.log(message);
+    let msg = message.split(";");
+    let game = newSocket.getGame(); //?
+    game.chess.move({from:msg[0],to:msg[1]})
+    console.log(game.chess.ascii());
+  })
+})
 
 function WebSocket(id,ws) {
   this.id = id;
   this.ws = ws;
-  this.map = new Map(this.id, game);
+  this.game = null;
+
+  this.getGame = function() {
+    return this.game;
+  }
+  this.setGame = function(game) {
+    this.game = game;
+  }
 }
 
 function Game(chess, wsWhite, id){
@@ -70,8 +80,16 @@ function Game(chess, wsWhite, id){
     this.wsWhite = wsWhite;
   }
 
+  this.getWsWhite = function() {
+    return this.wsWhite;
+  }
+
   this.setWsBlack = function(wsBlack){
     this.wsBlack = wsBlack;
+  }
+  
+  this.getWsBlack = function() {
+    return this.wsBlack;
   }
 
   this.getId = function(){
