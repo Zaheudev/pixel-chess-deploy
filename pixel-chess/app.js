@@ -26,6 +26,7 @@ var connectionID = 0;
 wsServer.on("connection", function(ws) {
   let con = ws;
   con.id = connectionID++;
+
   if (currentGames.size != 0) {
     let gameFound = false;
     //loop through existing games, try to find a game with a player waiting
@@ -35,6 +36,7 @@ wsServer.on("connection", function(ws) {
         websockets.set(con.id, game);
         gameFound = true;
         console.log("Game found, joining game running " + id);
+        game.setState("Started");
         //TODO Start game, send messages to players
         break;
       }
@@ -51,27 +53,60 @@ wsServer.on("connection", function(ws) {
     currentGames.set(newGame.getId(), newGame);
     websockets.set(con.id, newGame); 
   }
+
   ws.on("message", function(message) {
     console.log(message);
     let msg = message.split(";");
     let currentGame = websockets.get(con.id);
-    //TODO, don't accept moves until game started
-    console.log(con.id);
 
-    if ((currentGame.getWsWhite() === con && currentGame.getChess().turn() === 'w') ||
-    (currentGame.getWsBlack() === con && currentGame.getChess().turn() === 'b')) {
-      if (currentGame.chess.move({from:msg[0],to:msg[1]}) != null){
-        console.log(currentGame.chess.ascii());
-      }else {
-        //TODO Send client invalid move message!
-        console.log("Invalid move, try again!");
-      }
+    //only accept moves if gameState = Started
+    console.log(currentGame.getState());
+    if(currentGame.getState() === "Started") {
+      if ((currentGame.getWsWhite() === con && currentGame.getChess().turn() === 'w') ||
+      (currentGame.getWsBlack() === con && currentGame.getChess().turn() === 'b')) {
+        if (currentGame.chess.move({from:msg[0],to:msg[1]}) != null){
+          console.log(currentGame.chess.ascii());
+        }else {
+          //TODO Send client invalid move message!
+          console.log("Invalid move, try again!");
+        }
       }else {
         console.log("Player tried to move for the other. CHEATER!");
       }
+    }
   })
-})
 
+  ws.on("close", function(code) {
+    console.log(con.id + " has closed the connection" );
+    let currentGame = websockets.get(con.id);
+
+    if(currentGame.getState() != "Waiting") {
+      try {
+        currentGame.getWsWhite().close();
+        currentGame.setWsWhite(null);
+      }catch (e) {
+        console.log("Black is closing " + e);
+        currentGame.setState("White");
+      }
+      try {
+        currentGame.getWsBlack().close();
+        currentGame.setWsBlack(null)
+      }catch (e) {
+        console.log("White is closing " + e);
+        currentGame.setState("Black");
+      }
+    }else {
+      //canceled
+      currentGame.setState("Aborted");
+    }
+    //TODO send GAME OVER message to client
+    if(currentGame.getState() != "Started"){
+      console.log(currentGame.getState());
+    }
+
+  })
+
+})
 /*
 app.get('/', function(req,res) {
   const title = "Pixel Chess";

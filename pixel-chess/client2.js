@@ -3,6 +3,7 @@ const ws = require("ws");
 const client = new ws("ws://localhost:8080");
 
 client.on('open', () => {
-    client.send("f2;f3");
+    setTimeout(function() {client.send("f2;f3");},3000);
+    //client.close();
 
 })
