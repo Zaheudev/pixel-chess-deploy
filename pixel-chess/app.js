@@ -1,11 +1,11 @@
 const express = require("express");
 const http = require("http");
-const indexRouter = require("./routes/index");
 const path = require("path");
 const {Chess} = require("chess.js");
 const ws = require("ws");
-const { randomInt } = require("crypto");
-
+const indexRouter = require("./routes/index");
+const Game = require("./game.js");
+const status = require("./statTracker");
 
 const port = process.argv[2];
 const app = express();
@@ -17,85 +17,60 @@ app.set('view engine','ejs');
 app.get("/", indexRouter);
 app.get("/play", indexRouter);
 
-const currentGames = new Map(); 
-
 const wsServer = new ws.Server({port:8080});
-/*
-wsServer.on('connection', function(ws) {
-  console.log("Connected"+ws);
-  let newGame = new Game(new Chess(), ws, randomInt(420));
-  ws.on("message", function(message) {
-    console.log(message);
-    let msg = message.split(";");
-    newGame.chess.move({from:msg[0],to:msg[1]})
-    console.log(newGame.chess.ascii());
-  }
-)})
-*/
+
+var currentGames = new Map();
+var websockets = new Map();
+var connectionID = 0;
 
 wsServer.on("connection", function(ws) {
+  let con = ws;
+  con.id = connectionID++;
   if (currentGames.size != 0) {
-    for (let game of currentGames) {
+    let gameFound = false;
+    //loop through existing games, try to find a game with a player waiting
+    for (const [id, game] of currentGames) {
       if (game.getWsBlack() === null) {
-        game.setWsBlack(new WebSocket(randomInt(1000),ws));
+        game.setWsBlack(con);
+        websockets.set(con.id, game);
+        gameFound = true;
+        console.log("Game found, joining game running " + id);
         //TODO Start game, send messages to players
         break;
       }
-    }//TODO if no free games found, create new game
+      //game not found, creating a new one
+    }if(gameFound == false){
+      console.log("No free game found, creating new game!")
+      let newGame = new Game(new Chess(),con, status.gamesInitialized++);
+      currentGames.set(newGame.getId(), newGame);
+      websockets.set(con.id, newGame);
+    }//if no games running, create new game
   }else {
-    let newSocket = new WebSocket(randomInt(1000),ws);
-    let newGame = new Game(new Chess(), newSocket);
-    newSocket.setGame(newGame);
+    console.log("No games running, creating new game!")
+    let newGame = new Game(new Chess(),con, status.gamesInitialized++);
     currentGames.set(newGame.getId(), newGame);
+    websockets.set(con.id, newGame); 
   }
   ws.on("message", function(message) {
     console.log(message);
     let msg = message.split(";");
-    let game = newSocket.getGame(); //?
-    game.chess.move({from:msg[0],to:msg[1]})
-    console.log(game.chess.ascii());
+    let currentGame = websockets.get(con.id);
+    //TODO, don't accept moves until game started
+    console.log(con.id);
+
+    if ((currentGame.getWsWhite() === con && currentGame.getChess().turn() === 'w') ||
+    (currentGame.getWsBlack() === con && currentGame.getChess().turn() === 'b')) {
+      if (currentGame.chess.move({from:msg[0],to:msg[1]}) != null){
+        console.log(currentGame.chess.ascii());
+      }else {
+        //TODO Send client invalid move message!
+        console.log("Invalid move, try again!");
+      }
+      }else {
+        console.log("Player tried to move for the other. CHEATER!");
+      }
   })
 })
-
-function WebSocket(id,ws) {
-  this.id = id;
-  this.ws = ws;
-  this.game = null;
-
-  this.getGame = function() {
-    return this.game;
-  }
-  this.setGame = function(game) {
-    this.game = game;
-  }
-}
-
-function Game(chess, wsWhite, id){
-  this.id = id;
-  this.chess = chess;
-  this.wsWhite = wsWhite;
-  this.wsBlack = null;
-
-  this.setWsWhite = function(wsWhite){
-    this.wsWhite = wsWhite;
-  }
-
-  this.getWsWhite = function() {
-    return this.wsWhite;
-  }
-
-  this.setWsBlack = function(wsBlack){
-    this.wsBlack = wsBlack;
-  }
-  
-  this.getWsBlack = function() {
-    return this.wsBlack;
-  }
-
-  this.getId = function(){
-    return this.id;
-  }
-}
 
 /*
 app.get('/', function(req,res) {
