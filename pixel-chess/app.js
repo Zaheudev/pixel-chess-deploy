@@ -31,7 +31,7 @@ wsServer.on("connection", function(ws) {
     let gameFound = false;
     //loop through existing games, try to find a game with a player waiting
     for (const [id, game] of currentGames) {
-      if (game.getWsBlack() === null) {
+      if (game.getWsBlack() === null && game.getState() === "Waiting") {
         game.setWsBlack(con);
         websockets.set(con.id, game);
         gameFound = true;
