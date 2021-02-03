@@ -5,7 +5,7 @@ const {Chess} = require("chess.js");
 const ws = require("ws");
 const indexRouter = require("./routes/index");
 const Game = require("./game.js");
-const status = require("./statTracker");
+const Status = require("./statTracker.js");
 
 const port = process.argv[2];
 const app = express();
@@ -22,10 +22,15 @@ const wsServer = new ws.Server({port:8080});
 var currentGames = new Map();
 var websockets = new Map();
 var connectionID = 0;
+var status = new Status();
+var gamesInitialized = 0;
 
 wsServer.on("connection", function(ws) {
   let con = ws;
   con.id = connectionID++;
+  console.log("Completed: "+status.getCompleted());
+  console.log("Started: "+status.getStarted());
+  console.log("Aborted: " + status.getAborted());
 
   if (currentGames.size != 0) {
     let gameFound = false;
@@ -36,14 +41,26 @@ wsServer.on("connection", function(ws) {
         websockets.set(con.id, game);
         gameFound = true;
         console.log("Game found, joining game running " + id);
+
+        //coinflip to determine player color, send color message to each player
+        let coinflip = Math.random(); //randint 0 <= x < 1
+        if (coinflip <= 0.49) {
+          game.swapSides();
+        }
+        game.getWsWhite().send("White");
+        game.getWsBlack().send("Black"); 
         game.setState("Started");
+        status.incStarted();
+        game.getWsWhite().send("Started");
+        game.getWsBlack().send("Started");
+        game.getWsWhite().send("Turn");
         //TODO Start game, send messages to players
         break;
       }
       //game not found, creating a new one
     }if(gameFound == false){
       console.log("No free game found, creating new game!")
-      let newGame = new Game(new Chess(),con, status.gamesInitialized++);
+      let newGame = new Game(new Chess(),con, gamesInitialized++);
       currentGames.set(newGame.getId(), newGame);
       websockets.set(con.id, newGame);
     }//if no games running, create new game
@@ -64,48 +81,78 @@ wsServer.on("connection", function(ws) {
     if(currentGame.getState() === "Started") {
       if ((currentGame.getWsWhite() === con && currentGame.getChess().turn() === 'w') ||
       (currentGame.getWsBlack() === con && currentGame.getChess().turn() === 'b')) {
-        if (currentGame.chess.move({from:msg[0],to:msg[1]}) != null){
-          console.log(currentGame.chess.ascii());
+        if (currentGame.getChess().move({from:msg[0],to:msg[1]}) != null){
+          console.log(currentGame.getChess().ascii());
+          con.send("Valid");
+
+          //check for GAME OVER after move
+          if (currentGame.getChess().game_over()) {
+            status.incCompleted();
+            if (currentGame.getChess().in_checkmate()) {
+              if (con === currentGame.getWsWhite()) {
+                currentGame.setState("White");
+                currentGame.getWsWhite().close();
+                currentGame.getWsBlack().close();
+              }else {
+                currentGame.setState("Black");
+                currentGame.getWsWhite().close();
+                currentGame.getWsBlack().close();
+              }
+            }
+
+          //check for DRAW after move
+          else if (currentGame.getChess().in_draw() && currentGame.getChess().in_stalemate() && 
+          currentGame.getChess().in_threefold_repetition() && currentGame.getChess().insufficient_material()){
+            currentGame.setState("Draw");
+            status.incCompleted();
+            currentGame.getWsWhite().send("Draw");
+            currentGame.getWsBlack().send("Draw");
+            currentGame.getWsWhite().close();
+            currentGame.getWsBlack().close();
+          }
+          if (currentGames.getChess().turn() === 'w') {
+            currentGames.getWsWhite().send("Turn");
+          }else {
+            currentGames.getWsBlack().send("Turn");
+          }
         }else {
-          //TODO Send client invalid move message!
-          console.log("Invalid move, try again!");
+          //Send client invalid move message!
+          console.log("Invalid move!");
+          con.send("Invalid");
         }
       }else {
+        //Send client who tried to made a move for the opponent an invalid message
         console.log("Player tried to move for the other. CHEATER!");
+        con.send("Invalid");
       }
     }
-  })
-
+  }
+})
+  let disconnected = false;
   ws.on("close", function(code) {
     console.log(con.id + " has closed the connection" );
     let currentGame = websockets.get(con.id);
-
-    if(currentGame.getState() != "Waiting") {
-      try {
-        currentGame.getWsWhite().close();
-        currentGame.setWsWhite(null);
-      }catch (e) {
-        console.log("Black is closing " + e);
-        currentGame.setState("White");
+    
+      if(currentGame.getState() != "Waiting") {
+       if(con === currentGame.getWsWhite()) {
+         currentGame.getWsBlack().close();
+         currentGame.setState('Black');
+       }
+       else {
+         currentGame.getWsWhite().close();
+         currentGame.setState('White');
+        } 
       }
-      try {
-        currentGame.getWsBlack().close();
-        currentGame.setWsBlack(null)
-      }catch (e) {
-        console.log("White is closing " + e);
-        currentGame.setState("Black");
-      }
-    }else {
+    else {
       //canceled
       currentGame.setState("Aborted");
+      status.incAborted();
     }
     //TODO send GAME OVER message to client
     if(currentGame.getState() != "Started"){
       console.log(currentGame.getState());
     }
-
   })
-
 })
 /*
 app.get('/', function(req,res) {

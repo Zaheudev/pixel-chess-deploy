@@ -28,13 +28,14 @@ function Game(chess, wsWhite, id){
     this.getChess = function() {
       return this.chess;
     }
-
+    
     /*possible states
     "Waiting"
-      "Aborted"
+    "Aborted"
     "Started"
     "White"
     "Black"
+    "Draw"
     */
     this.setState = function(state) {
       this.gameState = state;
@@ -42,6 +43,13 @@ function Game(chess, wsWhite, id){
 
     this.getState = function(){
       return this.gameState;
+    }
+
+    this.swapSides = function() {
+      let temp = this.wsWhite;
+      this.wsWhite = this.wsBlack;
+      this.wsBlack = temp;
+      temp = null;
     }
   }
 
