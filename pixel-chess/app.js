@@ -54,7 +54,7 @@ wsServer.on("connection", function(ws) {
         game.getWsWhite().send("Started");
         game.getWsBlack().send("Started");
         game.getWsWhite().send("Turn");
-        //TODO Start game, send messages to players
+        
         break;
       }
       //game not found, creating a new one
@@ -66,7 +66,7 @@ wsServer.on("connection", function(ws) {
     }//if no games running, create new game
   }else {
     console.log("No games running, creating new game!")
-    let newGame = new Game(new Chess(),con, status.gamesInitialized++);
+    let newGame = new Game(new Chess(),con, gamesInitialized++);
     currentGames.set(newGame.getId(), newGame);
     websockets.set(con.id, newGame); 
   }
@@ -84,6 +84,8 @@ wsServer.on("connection", function(ws) {
         if (currentGame.getChess().move({from:msg[0],to:msg[1]}) != null){
           console.log(currentGame.getChess().ascii());
           con.send("Valid");
+
+          //TODO check if in check, send message
 
           //check for GAME OVER after move
           if (currentGame.getChess().game_over()) {
