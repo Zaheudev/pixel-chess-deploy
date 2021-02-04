@@ -9,7 +9,7 @@ client.on('open', () => {
     //     let answer = prompt("Next move pls:")
     //     client.send(answer);
     //  }
-    setTimeout(function() {client.send("e2;e4");},2000);
+    setTimeout(function() {client.send("e2");},2000);
     setTimeout(function() {client.send("a7;a5");},5000);
     setTimeout(function() {client.close();},7000);
 })

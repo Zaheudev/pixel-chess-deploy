@@ -16,3 +16,10 @@
     height: 40px;
     width: 40px;
 }
+
+.chess-board td:hover {
+    position: absolute;
+    border-color: green;
+    border-width: 2.5px;
+
+}

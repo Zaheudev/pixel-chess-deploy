@@ -6,6 +6,7 @@ const ws = require("ws");
 const indexRouter = require("./routes/index");
 const Game = require("./game.js");
 const Status = require("./statTracker.js");
+var List = require("collections/list");
 
 const port = process.argv[2];
 const app = express();
@@ -73,60 +74,64 @@ wsServer.on("connection", function(ws) {
 
   ws.on("message", function(message) {
     console.log(message);
-    let msg = message.split(";");
     let currentGame = websockets.get(con.id);
 
     //only accept moves if gameState = Started
     console.log(currentGame.getState());
     if(currentGame.getState() === "Started") {
-      if ((currentGame.getWsWhite() === con && currentGame.getChess().turn() === 'w') ||
-      (currentGame.getWsBlack() === con && currentGame.getChess().turn() === 'b')) {
-        if (currentGame.getChess().move({from:msg[0],to:msg[1]}) != null){
-          console.log(currentGame.getChess().ascii());
-          con.send("Valid");
+      if (message.includes(';')) {
+        let msg = message.split(';');
+        if ((currentGame.getWsWhite() === con && currentGame.getChess().turn() === 'w') ||
+        (currentGame.getWsBlack() === con && currentGame.getChess().turn() === 'b')) {
+          if (currentGame.getChess().move({from:msg[0],to:msg[1]}) != null){
+            console.log(currentGame.getChess().ascii());
+            con.send("Valid");
 
-          //TODO check if in check, send message
+            //TODO check if in check, send message
 
-          //check for GAME OVER after move
-          if (currentGame.getChess().game_over()) {
-            status.incCompleted();
-            if (currentGame.getChess().in_checkmate()) {
-              if (con === currentGame.getWsWhite()) {
-                currentGame.setState("White");
-                currentGame.getWsWhite().close();
-                currentGame.getWsBlack().close();
-              }else {
-                currentGame.setState("Black");
-                currentGame.getWsWhite().close();
-                currentGame.getWsBlack().close();
+            //check for GAME OVER after move
+            if (currentGame.getChess().game_over()) {
+              status.incCompleted();
+              if (currentGame.getChess().in_checkmate()) {
+                if (con === currentGame.getWsWhite()) {
+                  currentGame.setState("White");
+                  currentGame.getWsWhite().close();
+                  currentGame.getWsBlack().close();
+                }else {
+                  currentGame.setState("Black");
+                  currentGame.getWsWhite().close();
+                  currentGame.getWsBlack().close();
+                }
               }
-            }
 
-          //check for DRAW after move
-          else if (currentGame.getChess().in_draw() && currentGame.getChess().in_stalemate() && 
-          currentGame.getChess().in_threefold_repetition() && currentGame.getChess().insufficient_material()){
-            currentGame.setState("Draw");
-            status.incCompleted();
-            currentGame.getWsWhite().send("Draw");
-            currentGame.getWsBlack().send("Draw");
-            currentGame.getWsWhite().close();
-            currentGame.getWsBlack().close();
-          }
-          if (currentGames.getChess().turn() === 'w') {
-            currentGames.getWsWhite().send("Turn");
+            //check for DRAW after move
+            else if (currentGame.getChess().in_draw() && currentGame.getChess().in_stalemate() && 
+            currentGame.getChess().in_threefold_repetition() && currentGame.getChess().insufficient_material()){
+              currentGame.setState("Draw");
+              status.incCompleted();
+              currentGame.getWsWhite().send("Draw");
+              currentGame.getWsBlack().send("Draw");
+              currentGame.getWsWhite().close();
+              currentGame.getWsBlack().close();
+            }
+            if (currentGames.getChess().turn() === 'w') {
+              currentGames.getWsWhite().send("Turn");
+            }else {
+              currentGames.getWsBlack().send("Turn");
+            }
           }else {
-            currentGames.getWsBlack().send("Turn");
+            //Send client invalid move message!
+            console.log("Invalid move!");
+            con.send("Invalid");
           }
         }else {
-          //Send client invalid move message!
-          console.log("Invalid move!");
+          //Send client who tried to made a move for the opponent an invalid message
+          console.log("Player tried to move for the other. CHEATER!");
           con.send("Invalid");
         }
-      }else {
-        //Send client who tried to made a move for the opponent an invalid message
-        console.log("Player tried to move for the other. CHEATER!");
-        con.send("Invalid");
       }
+    }else {
+      con.send(currentGame.getChess().moves({ square: message }).toArray());
     }
   }
 })
