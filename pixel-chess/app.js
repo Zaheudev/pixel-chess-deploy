@@ -6,7 +6,7 @@ const ws = require("ws");
 const indexRouter = require("./routes/index");
 const Game = require("./game.js");
 const Status = require("./statTracker.js");
-var List = require("collections/list");
+const Message = require("./messages.js")
 
 const port = process.argv[2];
 const app = express();
@@ -48,13 +48,13 @@ wsServer.on("connection", function(ws) {
         if (coinflip <= 0.49) {
           game.swapSides();
         }
-        game.getWsWhite().send("White");
-        game.getWsBlack().send("Black"); 
+        game.getWsWhite().send(JSON.stringify(new Message("playerType", "White")));
+        game.getWsBlack().send(JSON.stringify(new Message("playerType", "Black")));
         game.setState("Started");
         status.incStarted();
-        game.getWsWhite().send("Started");
-        game.getWsBlack().send("Started");
-        game.getWsWhite().send("Turn");
+        game.getWsWhite().send(JSON.stringify(new Message("gameStart")));
+        game.getWsBlack().send(JSON.stringify(new Message("gameStart")));
+        game.getWsWhite().send(JSON.stringify(new Message("turn")));
         
         break;
       }
@@ -77,6 +77,9 @@ wsServer.on("connection", function(ws) {
     let currentGame = websockets.get(con.id);
 
     //only accept moves if gameState = Started
+
+    //TODO parse JSON messages from client (optional)
+    //TODO block possibleMove requests from client if not their turn 
     console.log(currentGame.getState());
     if(currentGame.getState() === "Started") {
       if (message.includes(';')) {
@@ -85,7 +88,7 @@ wsServer.on("connection", function(ws) {
         (currentGame.getWsBlack() === con && currentGame.getChess().turn() === 'b')) {
           if (currentGame.getChess().move({from:msg[0],to:msg[1]}) != null){
             console.log(currentGame.getChess().ascii());
-            con.send("Valid");
+            con.send(JSON.stringify(new Message("validity","valid")));
 
             //TODO check if in check, send message
 
@@ -105,33 +108,33 @@ wsServer.on("connection", function(ws) {
               }
 
             //check for DRAW after move
-            else if (currentGame.getChess().in_draw() && currentGame.getChess().in_stalemate() && 
-            currentGame.getChess().in_threefold_repetition() && currentGame.getChess().insufficient_material()){
+            else if (currentGame.getChess().in_draw() || currentGame.getChess().in_stalemate() || 
+            currentGame.getChess().in_threefold_repetition() || currentGame.getChess().insufficient_material()){
               currentGame.setState("Draw");
               status.incCompleted();
-              currentGame.getWsWhite().send("Draw");
-              currentGame.getWsBlack().send("Draw");
+              currentGame.getWsWhite().send(JSON.stringify(new Message("draw")));
+              currentGame.getWsBlack().send(JSON.stringify(new Message("draw")));
               currentGame.getWsWhite().close();
               currentGame.getWsBlack().close();
             }
-            if (currentGames.getChess().turn() === 'w') {
-              currentGames.getWsWhite().send("Turn");
+            if (currentGame.getChess().turn() === 'w') {
+              currentGame.getWsWhite().send(JSON.stringify(new Message("turn")));
             }else {
-              currentGames.getWsBlack().send("Turn");
+              currentGame.getWsBlack().send(JSON.stringify(new Message("turn")));
             }
           }else {
             //Send client invalid move message!
             console.log("Invalid move!");
-            con.send("Invalid");
+            con.send(JSON.stringify(new Message("validity","invalid")));
           }
         }else {
           //Send client who tried to made a move for the opponent an invalid message
           console.log("Player tried to move for the other. CHEATER!");
-          con.send("Invalid");
+          con.send(JSON.stringify(new Message("validity","invalid")));
         }
       }
     }else {
-      con.send(currentGame.getChess().moves({ square: message }).toArray());
+      con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: message, verbose: true})))));
     }
   }
 })
