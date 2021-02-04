@@ -3,39 +3,52 @@ client.binaryType = "arraybuffer";
 
 const board = document.querySelector(".chess-board");
 const state = document.querySelector("#state h3");
-
+var possibleMoves = [];
+var possibleCaptures = [];
 
 //TODO parse JSON messages, depending on message.type, resolve message
 client.onmessage = function (event) {
     console.log(event.data);
     let msg = JSON.parse(event.data);
     resolveMsg(msg);
-    /*
-    if(event.data === "Started"){
-        console.log(state);
-        state.innerHTML = "Starting..."
-    }
-    */
-
 }
 
+var possible = [];
 function resolveMsg(msg) {
     switch(msg.type) {
+    //TODO fix captures not becoming red
     case "possibleMoves":
         console.log(msg.data);
+        possibleMoves = msg.data;
         for (let move of msg.data) {
             let e = document.getElementById(move.to);
-            if (move.flag === 'c' || move.flag === 'e') {
-                e.style.backgroundColor = 'red';
+            if (move.flags === 'c' || move.flags === 'e') {
+                e.style.backgroundColor = "red";
+                possible.push(e);
+            }else {
+                e.style.backgroundColor = "green";
+                possible.push(e);
             }
-            e.style.backgroundColor = "green";
         }
         break;
     case "validity":
         console.log(msg.data);
+        if(msg.data == "valid") {
+            let from = document.getElementById(cell1);
+            let to = document.getElementById(cell2);
+            to.innerHTML = from.innerHTML;
+            from.innerHTML = '';
+        }
         break;
     case "turn":
         console.log("Your turn");
+        break;
+    case "opponentMove":
+        console.log("Opponent's move is: "+msg.data.from+";"+msg.data.to);
+        let from = document.getElementById(msg.data.from);
+        let to = document.getElementById(msg.data.to);
+        to.innerHTML = from.innerHTML;
+        from.innerHTML = '';
         break;
     case "check":
         console.log("You're in check!");
@@ -60,21 +73,44 @@ function resolveMsg(msg) {
     }
 }
 
-//TODO reset all possibleMoves if another piece is selected!
+//TODO reset all possibleMoves if another cell is selected!
 //TODO send move to server if possibleMove cell is selected after click on a piece
 var pieceSelected = false;
+var cell1 = null;
+var cell2 = null;
+
 board.addEventListener('click', (e)=>{
-    let imgCell = document.getElementById(e.target.id); 
+    let imgCell = document.getElementById(e.target.id);
+    
     if (e.target.nodeName === 'TD') {
+        if (!pieceSelected) {
+            cell1 = e.target.id;
+            console.log("Cell1 = "+cell1);
+            client.send(cell1);
+            pieceSelected = true;
+        }else {
+            cell2 = e.target.id;
+            console.log("Cell2 = "+ cell2);
+            if (cell1 != null && cell2 != null) {
+                console.log(cell1+";"+cell2);
+                client.send(cell1+";"+cell2);
+                console.log("SENT!");
+                for (cell of possible){
+                    cell.style.backgroundColor = "";
+                }
+                possible = [];
+                //e.target.style.backgroundColor = "";
+                pieceSelected = false;
+            }
+        }
+        /*
         if(imgCell.hasChildNodes()){
-            console.log(imgCell.firstElementChild);
+            console.log(e.target.id);
             //imgCell.style.borderColor = "red";
             pieceSelected = true;
         }
-        if(pieceSelected){
-            console.log(e.target.id);
-            client.send(e.target.id);
-        }
+        */
+    //TODO make it work when pressing on image as well!!!
     }else if(e.target.nodeName === 'IMG'){
         console.log(imgCell.parentElement.id);
         //imgCell.parentElement.style.borderColor = "red";

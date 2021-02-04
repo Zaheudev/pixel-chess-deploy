@@ -89,6 +89,11 @@ wsServer.on("connection", function(ws) {
           if (currentGame.getChess().move({from:msg[0],to:msg[1]}) != null){
             console.log(currentGame.getChess().ascii());
             con.send(JSON.stringify(new Message("validity","valid")));
+            if (con === currentGame.getWsWhite()) {
+              currentGame.getWsBlack().send(JSON.stringify(new Message("opponentMove", {from:msg[0],to:msg[1]})));
+            }else {
+              currentGame.getWsWhite().send(JSON.stringify(new Message("opponentMove",{from:msg[0], to:msg[1]})));
+            }
 
             //TODO check if in check, send message
 
@@ -122,7 +127,8 @@ wsServer.on("connection", function(ws) {
             }else {
               currentGame.getWsBlack().send(JSON.stringify(new Message("turn")));
             }
-          }else {
+          }
+        }else {
             //Send client invalid move message!
             console.log("Invalid move!");
             con.send(JSON.stringify(new Message("validity","invalid")));
@@ -132,12 +138,12 @@ wsServer.on("connection", function(ws) {
           console.log("Player tried to move for the other. CHEATER!");
           con.send(JSON.stringify(new Message("validity","invalid")));
         }
-      }
     }else {
+      console.log("Sending moves!");
       con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: message, verbose: true})))));
     }
   }
-})
+  })
   let disconnected = false;
   ws.on("close", function(code) {
     console.log(con.id + " has closed the connection" );
