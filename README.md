@@ -1,4 +1,4 @@
-# pixel-chess
+# pixel-chess (WIP)
 An online chess game created with Node.js and Websockets
 
 ## Initial mockups
