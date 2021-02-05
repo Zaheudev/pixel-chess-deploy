@@ -1,7 +1,10 @@
 const client = new WebSocket("ws://localhost:8080");
 
 const board = document.querySelector(".chess-board");
-const state = document.querySelector("#state h3");
+const state = document.querySelector("#state h1");
+const historyDiv = document.querySelector("#historyElements");
+const turnText = document.querySelector("#turn");
+
 var possiblePieces = [];
 var possibleMoves = [];
 var playerType = "";
@@ -38,6 +41,10 @@ function resolveMsg(msg) {
             let to = document.getElementById(cell2);
             to.innerHTML = from.innerHTML;
             from.innerHTML = '';
+            const elem = document.createElement('p');
+            elem.appendChild(document.createTextNode(`${from.id};${to.id}`));
+            historyDiv.appendChild(elem);
+            turnText.firstElementChild.innerHTML = "OPPONENT TURN";
         }
         break;
     case "turn":
@@ -51,6 +58,10 @@ function resolveMsg(msg) {
         let to = document.getElementById(msg.data.to);
         to.innerHTML = from.innerHTML;
         from.innerHTML = '';
+        const elem = document.createElement('p');
+        elem.appendChild(document.createTextNode(`${from.id};${to.id}`));
+        historyDiv.appendChild(elem);
+        turnText.firstElementChild.innerHTML = "YOUR TURN";
         break;
     case "check":
         console.log("You're in check!");
@@ -65,11 +76,16 @@ function resolveMsg(msg) {
         break;
     case "gameStart":
         console.log("Game has started");
+        state.innerHTML = "Player joined. Game Started"
+        setTimeout(()=>{
+            state.innerHTML = "";
+        }, 5000)
         break;
     case "playerType":
         console.log(msg.data);
         if(msg.data === "Black") {
             playerType = "Black";
+            turnText.firstElementChild.innerHTML = "OPPONENT TURN"
         }
         else if(msg.data === "White") {
             playerType = "White";

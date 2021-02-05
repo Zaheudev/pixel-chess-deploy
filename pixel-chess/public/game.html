@@ -17,40 +17,48 @@
     </header>
     <body>
         <section id="left">
-        <div id="state">
-            <h3>Waiting for opponent...</h3>
-        </div>
-        <div id="quitBtn">
-            <button>QUIT</button>
-        </div>
-        <div id="turn">
-            <h3></h3>
-        </div>
+            <div id="state">
+                <h1>Waiting for opponent...</h1>
+            </div>
+
+            <div class="history">
+                <h2>MOVES!</h2>
+                <div id="historyElements">
+                </div>
+            </div>
+
+            <div id="quitBtn">
+                <button>QUIT</button>
+            </div>
+
+            <div id="turn">
+                <h1>YOUR TURN</h1>
+            </div>
         </section>
 
         <table class="chess-board">
             <tbody>
                 <tr>
-                    <td class="white" id="a8"><img src="images/chess/black_rook.png" id="black_rook1"></td> 
-                    <td class="black" id="b8"><img src="images/chess/black_knight.png" id="black_knight1"></td>
-                    <td class="white" id="c8"><img src="images/chess/black_bishop.png" id="black_bishop1"></td>
-                    <td class="black" id="d8"><img src="images/chess/black_queen.png" id="black_queen"></td>
-                    <td class="white" id="e8"><img src="images/chess/black_king.png" id="black_king"></td>
-                    <td class="black" id="f8"><img src="images/chess/black_bishop.png" id="black_bishop2"></td>
-                    <td class="white" id="g8"><img src="images/chess/black_knight.png" id="black_knight2"></td>
-                    <td class="black" id="h8"><img src="images/chess/black_rook.png" id="black_rook2"></td>
+                    <td class="white" id="a8"><img src="images/chess/black_rook.png" draggable="false" id="black_rook1"></td> 
+                    <td class="black" id="b8"><img src="images/chess/black_knight.png" draggable="false" id="black_knight1"></td>
+                    <td class="white" id="c8"><img src="images/chess/black_bishop.png" draggable="false" id="black_bishop1"></td>
+                    <td class="black" id="d8"><img src="images/chess/black_queen.png" draggable="false" id="black_queen"></td>
+                    <td class="white" id="e8"><img src="images/chess/black_king.png" draggable="false" id="black_king"></td>
+                    <td class="black" id="f8"><img src="images/chess/black_bishop.png" draggable="false" id="black_bishop2"></td>
+                    <td class="white" id="g8"><img src="images/chess/black_knight.png" draggable="false" id="black_knight2"></td>
+                    <td class="black" id="h8"><img src="images/chess/black_rook.png" draggable="false" id="black_rook2"></td>
                     <th>8</th>
 
                 </tr>
                 <tr>
-                    <td class="black" id="a7"><img src="images/chess/black_pawn.png" id="black_pawn1"></td>
-                    <td class="white" id="b7"><img src="images/chess/black_pawn.png" id="black_pawn2"></td>
-                    <td class="black" id="c7"><img src="images/chess/black_pawn.png" id="black_pawn3"></td>
-                    <td class="white" id="d7"><img src="images/chess/black_pawn.png" id="black_pawn4"></td>
-                    <td class="black" id="e7"><img src="images/chess/black_pawn.png" id="black_pawn5"></td>
-                    <td class="white" id="f7"><img src="images/chess/black_pawn.png" id="black_pawn6"></td>
-                    <td class="black" id="g7"><img src="images/chess/black_pawn.png" id="black_pawn7"></td>
-                    <td class="white" id="h7"><img src="images/chess/black_pawn.png" id="black_pawn8"></td>
+                    <td class="black" id="a7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn1"></td>
+                    <td class="white" id="b7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn2"></td>
+                    <td class="black" id="c7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn3"></td>
+                    <td class="white" id="d7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn4"></td>
+                    <td class="black" id="e7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn5"></td>
+                    <td class="white" id="f7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn6"></td>
+                    <td class="black" id="g7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn7"></td>
+                    <td class="white" id="h7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn8"></td>
                     <th>7</th>
 
                 </tr>
@@ -103,26 +111,26 @@
 
                 </tr>
                 <tr>
-                    <td class="white" id="a2"><img src="images/chess/white_pawn.png" id="white_pawn1"></td>
-                    <td class="black" id="b2"><img src="images/chess/white_pawn.png" id="white_pawn2"></td>
-                    <td class="white" id="c2"><img src="images/chess/white_pawn.png" id="white_pawn3"></td>
-                    <td class="black" id="d2"><img src="images/chess/white_pawn.png" id="white_pawn4"></td>
-                    <td class="white" id="e2"><img src="images/chess/white_pawn.png" id="white_pawn5"></td>
-                    <td class="black" id="f2"><img src="images/chess/white_pawn.png" id="white_pawn6"></td>
-                    <td class="white" id="g2"><img src="images/chess/white_pawn.png" id="white_pawn7"></td>
-                    <td class="black" id="h2"><img src="images/chess/white_pawn.png" id="white_pawn8"></td>
+                    <td class="white" id="a2"><img src="images/chess/white_pawn.png" draggable="false"  id="white_pawn1"></td>
+                    <td class="black" id="b2"><img src="images/chess/white_pawn.png" draggable="false"  id="white_pawn2"></td>
+                    <td class="white" id="c2"><img src="images/chess/white_pawn.png" draggable="false" id="white_pawn3"></td>
+                    <td class="black" id="d2"><img src="images/chess/white_pawn.png" draggable="false" id="white_pawn4"></td>
+                    <td class="white" id="e2"><img src="images/chess/white_pawn.png" draggable="false" id="white_pawn5"></td>
+                    <td class="black" id="f2"><img src="images/chess/white_pawn.png" draggable="false" id="white_pawn6"></td>
+                    <td class="white" id="g2"><img src="images/chess/white_pawn.png" draggable="false" id="white_pawn7"></td>
+                    <td class="black" id="h2"><img src="images/chess/white_pawn.png" draggable="false" id="white_pawn8"></td>
                     <th>2</th>
 
                 </tr>
                 <tr>
-                    <td class="black" id="a1"><img src="images/chess/white_rook.png" id="white_rook1"></td>
-                    <td class="white" id="b1"><img src="images/chess/white_knight.png" id="white_knight1"></td>
-                    <td class="black" id="c1"><img src="images/chess/white_bishop.png" id="white_bishop1"></td>
-                    <td class="white" id="d1"><img src="images/chess/white_queen.png" id="white_queen"></td>
-                    <td class="black" id="e1"><img src="images/chess/white_king.png" id="white_king"></td>
-                    <td class="white" id="f1"><img src="images/chess/white_bishop.png" id="white_bishop2"></td>
-                    <td class="black" id="g1"><img src="images/chess/white_knight.png" id="white_knight2"></td>
-                    <td class="white" id="h1"><img src="images/chess/white_rook.png" id="white_rook2"></td>
+                    <td class="black" id="a1"><img src="images/chess/white_rook.png" draggable="false"  id="white_rook1"></td>
+                    <td class="white" id="b1"><img src="images/chess/white_knight.png" draggable="false" id="white_knight1"></td>
+                    <td class="black" id="c1"><img src="images/chess/white_bishop.png" draggable="false" id="white_bishop1"></td>
+                    <td class="white" id="d1"><img src="images/chess/white_queen.png" draggable="false" id="white_queen"></td>
+                    <td class="black" id="e1"><img src="images/chess/white_king.png" draggable="false" id="white_king"></td>
+                    <td class="white" id="f1"><img src="images/chess/white_bishop.png" draggable="false" id="white_bishop2"></td>
+                    <td class="black" id="g1"><img src="images/chess/white_knight.png" draggable="false" id="white_knight2"></td>
+                    <td class="white" id="h1"><img src="images/chess/white_rook.png" draggable="false" id="white_rook2"></td>
                     <th>1</th>
 
                 </tr>
@@ -172,7 +180,7 @@
             </table>
 
             <h3>Pieces Gained</h3>
-            
+
             <table id="pieces-gained">
                 <tbody>
                     <tr>
@@ -199,11 +207,8 @@
                         <td></td>
                         <td></td>
                     </tr>
-
                 </tbody>
-
         </table>
-
         </section>
     </body>
     <script type="text/javascript" src="./javascripts/gameclient.js"></script>

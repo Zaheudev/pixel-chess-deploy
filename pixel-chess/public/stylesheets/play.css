@@ -1,4 +1,4 @@
-.chess-board { border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-right: auto; }
+.chess-board { user-select: none; border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-right: auto; }
             .chess-board th { padding: .5em; }
             .chess-board td { border: 1px solid; width: 4em; height: 4em; }
             .chess-board .white { background: #eee; }
@@ -15,6 +15,7 @@
 .chess-board td > img {
     height: 40px;
     width: 40px;
+    user-select: none;
 }
 
 .chess-board td:hover {
@@ -22,5 +23,47 @@
     border-color: green;
     border-width: 2.5px;
     cursor: pointer;
+}
 
+#right{
+    position: absolute;
+    margin:auto;
+    left: 75%;
+    bottom: 45%;
+}
+
+#state h1{
+    text-align: center;
+}
+
+.history{
+    position: absolute;
+    left:2cm;
+    top: 27%;
+    text-align: center;
+}
+
+.history h2{
+    margin: 0;
+}
+
+.history p{
+    margin: 5%;
+}
+
+#historyElements{
+    border-width: 3px;
+    width:2.5cm;
+    height:5cm;
+    left:1cm;
+    border-color: black;
+    overflow: auto;
+    top: 20%;
+}
+
+#turn{
+    position: absolute;
+    bottom: 40%;
+    color: grey;
+    left: 5%;
 }
