@@ -96,7 +96,13 @@ wsServer.on("connection", function(ws) {
             }
 
             //TODO check if in check, send message
-
+            if (currentGame.getChess().in_check()) {
+              if (con === currentGame.getWsWhite()) {
+                currentGame.getWsBlack().send(JSON.stringify(new Message("check")));
+              }else {
+                currentGame.getWsWhite().send(JSON.stringify(new Message("check")));
+              }
+            }
             //check for GAME OVER after move
             if (currentGame.getChess().game_over()) {
               status.incCompleted();
@@ -140,7 +146,12 @@ wsServer.on("connection", function(ws) {
         }
     }else {
       console.log("Sending moves!");
-      con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: message, verbose: true})))));
+      if (con === currentGame.getWsWhite() && 'w' === currentGame.getChess().turn() ) {
+        con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: message, verbose: true})))));
+      }
+      else if (con === currentGame.getWsBlack() && 'b' === currentGame.getChess().turn()) {
+        con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: message, verbose: true})))));
+      }
     }
   }
   })

@@ -21,5 +21,6 @@
     position: absolute;
     border-color: green;
     border-width: 2.5px;
+    cursor: pointer;
 
 }

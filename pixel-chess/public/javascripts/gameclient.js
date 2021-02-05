@@ -5,6 +5,7 @@ const board = document.querySelector(".chess-board");
 const state = document.querySelector("#state h3");
 var possibleMoves = [];
 var possibleCaptures = [];
+var playerType;
 
 //TODO parse JSON messages, depending on message.type, resolve message
 client.onmessage = function (event) {
@@ -52,12 +53,27 @@ function resolveMsg(msg) {
         break;
     case "check":
         console.log("You're in check!");
+        let king;
+        if (playerType === "White") {
+            king = document.getElementById("white_king")
+        }
+        else if (playerType === "Black") {
+            king = document.getElementById("black_king")
+        }
+        king.style.backgroundColor = "red";
         break;
     case "gameStart":
         console.log("Game has started");
         break;
     case "playerType":
         console.log(msg.data);
+        if(msg.data === "Black") {
+            playerType = "Black";
+        }
+        else if(msg.data === "White") {
+            playerType = "White";
+        }
+        //TODO, flip board depending on color
         break;
     case "player-disconnect":
         console.log("Opponent disconnected");
@@ -99,8 +115,14 @@ board.addEventListener('click', (e)=>{
                     cell.style.backgroundColor = "";
                 }
                 possible = [];
-                //e.target.style.backgroundColor = "";
                 pieceSelected = false;
+                if (playerType === "White") {
+                    king = document.getElementById("white_king")
+                }
+                else if (playerType === "Black") {
+                    king = document.getElementById("black_king")
+                }
+                king.style.backgroundColor = "";
             }
         }
         /*
@@ -113,10 +135,32 @@ board.addEventListener('click', (e)=>{
     //TODO make it work when pressing on image as well!!!
     }else if(e.target.nodeName === 'IMG'){
         console.log(imgCell.parentElement.id);
-        //imgCell.parentElement.style.borderColor = "red";
-        pieceSelected = true;
-        console.log(e.target);
-        client.send(imgCell.parentElement.id);
+        if (!pieceSelected) {
+            cell1 = e.target.parentElement.id;
+            console.log("Cell1 = "+cell1);
+            client.send(cell1);
+            pieceSelected = true;
+        }else {
+            cell2 = e.target.parentElement.id;
+            console.log("Cell2 = "+ cell2);
+            if (cell1 != null && cell2 != null) {
+                console.log(cell1+";"+cell2);
+                client.send(cell1+";"+cell2);
+                console.log("SENT!");
+                for (cell of possible){
+                    cell.style.backgroundColor = "";
+                }
+                possible = [];
+                pieceSelected = false;
+                if (playerType === "White") {
+                    king = document.getElementById("white_king")
+                }
+                else if (playerType === "Black") {
+                    king = document.getElementById("black_king")
+                }
+                king.style.backgroundColor = "";
+            }
+        }
     }
 
 // });

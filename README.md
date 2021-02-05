@@ -8,6 +8,6 @@ An online chess game created with Node.js and Websockets
 ![GameScreen](chessgame.jpeg)
 
 ### Credits
-* Vel1khaN
+* Vel1khan
 * Zaheu
 * Ahmet Donmez (Planning & Mockup Design)
