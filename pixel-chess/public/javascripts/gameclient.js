@@ -3,11 +3,11 @@ client.binaryType = "arraybuffer";
 
 const board = document.querySelector(".chess-board");
 const state = document.querySelector("#state h3");
+var possiblePieces = [];
 var possibleMoves = [];
-var possibleCaptures = [];
-var playerType;
+var playerType = "";
 
-//TODO parse JSON messages, depending on message.type, resolve message
+//parse JSON messages, depending on message.type, resolve message
 client.onmessage = function (event) {
     console.log(event.data);
     let msg = JSON.parse(event.data);
@@ -25,10 +25,10 @@ function resolveMsg(msg) {
             let e = document.getElementById(move.to);
             if (move.flags === 'c' || move.flags === 'e') {
                 e.style.backgroundColor = "red";
-                possible.push(e);
+                possible.push(e.id);
             }else {
                 e.style.backgroundColor = "green";
-                possible.push(e);
+                possible.push(e.id);
             }
         }
         break;
@@ -43,6 +43,8 @@ function resolveMsg(msg) {
         break;
     case "turn":
         console.log("Your turn");
+        possiblePieces = msg.data;
+        console.log(possiblePieces);
         break;
     case "opponentMove":
         console.log("Opponent's move is: "+msg.data.from+";"+msg.data.to);
@@ -100,30 +102,42 @@ board.addEventListener('click', (e)=>{
     
     if (e.target.nodeName === 'TD') {
         if (!pieceSelected) {
-            cell1 = e.target.id;
-            console.log("Cell1 = "+cell1);
-            client.send(cell1);
-            pieceSelected = true;
-        }else {
-            cell2 = e.target.id;
-            console.log("Cell2 = "+ cell2);
-            if (cell1 != null && cell2 != null) {
-                console.log(cell1+";"+cell2);
-                client.send(cell1+";"+cell2);
-                console.log("SENT!");
-                for (cell of possible){
-                    cell.style.backgroundColor = "";
-                }
-                possible = [];
-                pieceSelected = false;
-                if (playerType === "White") {
-                    king = document.getElementById("white_king")
-                }
-                else if (playerType === "Black") {
-                    king = document.getElementById("black_king")
-                }
-                king.style.backgroundColor = "";
+            if (possiblePieces.includes(e.target.id)){
+                cell1 = e.target.id;
+                console.log("Cell1 = "+cell1);
+                client.send(cell1);
+                pieceSelected = true;
+                console.log(possible);
             }
+        }else {
+            if (possible.includes(e.target.id)) {
+                cell2 = e.target.id;
+                console.log("Cell2 = "+ cell2);
+                if (cell1 != null && cell2 != null) {
+                    console.log(cell1+";"+cell2);
+                    client.send(cell1+";"+cell2);
+                    console.log("SENT!");
+                    for (cellID of possible){
+                        document.getElementById(cellID).style.backgroundColor = "";
+                    }
+                    possible = [];
+                    pieceSelected = false;
+                    if (playerType === "White") {
+                        king = document.getElementById("white_king")
+                    }
+                    else if (playerType === "Black") {
+                        king = document.getElementById("black_king")
+                    }
+                    king.style.backgroundColor = "";
+                }
+        }else {
+            cell1 = null;
+            cell2 = null;
+            pieceSelected = false;
+            for (cellID of possible){
+                        document.getElementById(cellID).style.backgroundColor = "";
+            }
+        }
         }
         /*
         if(imgCell.hasChildNodes()){
@@ -136,29 +150,40 @@ board.addEventListener('click', (e)=>{
     }else if(e.target.nodeName === 'IMG'){
         console.log(imgCell.parentElement.id);
         if (!pieceSelected) {
-            cell1 = e.target.parentElement.id;
-            console.log("Cell1 = "+cell1);
-            client.send(cell1);
-            pieceSelected = true;
+            if (possiblePieces.includes(imgCell.parentElement.id)) {
+                cell1 = e.target.parentElement.id;
+                console.log("Cell1 = "+cell1);
+                client.send(cell1);
+                pieceSelected = true;
+            }
         }else {
-            cell2 = e.target.parentElement.id;
-            console.log("Cell2 = "+ cell2);
-            if (cell1 != null && cell2 != null) {
-                console.log(cell1+";"+cell2);
-                client.send(cell1+";"+cell2);
-                console.log("SENT!");
-                for (cell of possible){
-                    cell.style.backgroundColor = "";
+            if (possible.includes(imgCell.parentElement.id)) {
+                cell2 = e.target.parentElement.id;
+                console.log("Cell2 = "+ cell2);
+                if (cell1 != null && cell2 != null) {
+                    console.log(cell1+";"+cell2);
+                    client.send(cell1+";"+cell2);
+                    console.log("SENT!");
+                    for (cellID of possible){
+                        document.getElementById(cellID).style.backgroundColor = "";
+                    }
+                    possible = [];
+                    pieceSelected = false;
+                    if (playerType === "White") {
+                        king = document.getElementById("white_king")
+                    }
+                    else if (playerType === "Black") {
+                        king = document.getElementById("black_king")
+                    }
+                    king.style.backgroundColor = "";
                 }
-                possible = [];
+            }else {
+                cell1 = null;
+                cell2 = null;
                 pieceSelected = false;
-                if (playerType === "White") {
-                    king = document.getElementById("white_king")
+                for (cellID of possible){
+                        document.getElementById(cellID).style.backgroundColor = "";
                 }
-                else if (playerType === "Black") {
-                    king = document.getElementById("black_king")
-                }
-                king.style.backgroundColor = "";
             }
         }
     }

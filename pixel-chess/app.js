@@ -54,7 +54,12 @@ wsServer.on("connection", function(ws) {
         status.incStarted();
         game.getWsWhite().send(JSON.stringify(new Message("gameStart")));
         game.getWsBlack().send(JSON.stringify(new Message("gameStart")));
-        game.getWsWhite().send(JSON.stringify(new Message("turn")));
+        //game.getWsWhite().send(JSON.stringify(new Message("turn")));
+        let pieces = [];
+              for(let move of game.getChess().moves({verbose:true})) {
+                pieces.push(move.from);
+              }
+              game.getWsWhite().send(JSON.stringify(new Message("turn", pieces)));
         
         break;
       }
@@ -94,6 +99,20 @@ wsServer.on("connection", function(ws) {
             }else {
               currentGame.getWsWhite().send(JSON.stringify(new Message("opponentMove",{from:msg[0], to:msg[1]})));
             }
+            //send turn message along with all possible moves (inefficient, only from field needs to be sent)
+            if (con === currentGame.getWsWhite() && currentGame.getChess().turn() === 'b') {
+              let pieces = [];
+              for(let move of currentGame.getChess().moves({verbose:true})) {
+                pieces.push(move.from);
+              }
+              currentGame.getWsBlack().send(JSON.stringify(new Message("turn", pieces)));
+            }else if (con === currentGame.getWsBlack() && currentGame.getChess().turn() === 'w') {
+              let pieces = [];
+              for(let move of currentGame.getChess().moves({verbose:true})) {
+                pieces.push(move.from);
+              }
+              currentGame.getWsWhite().send(JSON.stringify(new Message("turn", pieces)));
+            }
 
             //TODO check if in check, send message
             if (currentGame.getChess().in_check()) {
@@ -127,11 +146,6 @@ wsServer.on("connection", function(ws) {
               currentGame.getWsBlack().send(JSON.stringify(new Message("draw")));
               currentGame.getWsWhite().close();
               currentGame.getWsBlack().close();
-            }
-            if (currentGame.getChess().turn() === 'w') {
-              currentGame.getWsWhite().send(JSON.stringify(new Message("turn")));
-            }else {
-              currentGame.getWsBlack().send(JSON.stringify(new Message("turn")));
             }
           }
         }else {

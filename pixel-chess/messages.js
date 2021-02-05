@@ -1,16 +1,15 @@
 /*Message types:
 gameStart, none
-possibleMoves, array of cells
+possibleMoves, array of cells (cells that can be selected given a selected piece)
 opponentMove, string
 playerType, string(black/white)
 validity, string(valid/invalid)
-turn, none
+turn, array of cells (pieces that can be selected)
 check, none
 draw, none
 win, none
 lose, none
 player-disconnect, none
-
 */
 
 function Message (type, data, moves) {
