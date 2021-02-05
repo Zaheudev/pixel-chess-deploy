@@ -1,11 +1,11 @@
 const client = new WebSocket("ws://localhost:8080");
-client.binaryType = "arraybuffer";
 
 const board = document.querySelector(".chess-board");
 const state = document.querySelector("#state h3");
 var possiblePieces = [];
 var possibleMoves = [];
 var playerType = "";
+
 
 //parse JSON messages, depending on message.type, resolve message
 client.onmessage = function (event) {
@@ -17,7 +17,6 @@ client.onmessage = function (event) {
 var possible = [];
 function resolveMsg(msg) {
     switch(msg.type) {
-    //TODO fix captures not becoming red
     case "possibleMoves":
         console.log(msg.data);
         possibleMoves = msg.data;
@@ -91,8 +90,8 @@ function resolveMsg(msg) {
     }
 }
 
-//TODO reset all possibleMoves if another cell is selected!
-//TODO send move to server if possibleMove cell is selected after click on a piece
+//reset all possibleMoves if another cell is selected!
+//send move to server if possibleMove cell is selected after click on a piece
 var pieceSelected = false;
 var cell1 = null;
 var cell2 = null;
@@ -139,13 +138,6 @@ board.addEventListener('click', (e)=>{
             }
         }
         }
-        /*
-        if(imgCell.hasChildNodes()){
-            console.log(e.target.id);
-            //imgCell.style.borderColor = "red";
-            pieceSelected = true;
-        }
-        */
     //TODO make it work when pressing on image as well!!!
     }else if(e.target.nodeName === 'IMG'){
         console.log(imgCell.parentElement.id);
@@ -188,19 +180,4 @@ board.addEventListener('click', (e)=>{
         }
     }
 
-// });
-
-// board.addEventListener('mouseover', (e)=>{
-//     // if(e.target.nodeName.toUpperCase() === 'TD'){
-//     //     let cell = document.getElementById(e.target.id);
-//     //     cell.firstChild.style.position = "absolute";
-
-//     //     cell.addEventListener('mouseout', (e)=>{
-//     //         cell.firstChild.style.position = null;
-//     //     });
-//     // }
-
-//     if(e.target.nodeName.toUpperCase() === 'IMG'){
-//         let img = document.getElementById(e.target.id);
-//     }
 });

@@ -114,7 +114,7 @@ wsServer.on("connection", function(ws) {
               currentGame.getWsWhite().send(JSON.stringify(new Message("turn", pieces)));
             }
 
-            //TODO check if in check, send message
+            //check if in check, send message
             if (currentGame.getChess().in_check()) {
               if (con === currentGame.getWsWhite()) {
                 currentGame.getWsBlack().send(JSON.stringify(new Message("check")));
