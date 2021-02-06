@@ -109,6 +109,8 @@ function resolveMsg(msg) {
         if(msg.data === "Black") {
             playerType = "Black";
             turnText.firstElementChild.innerHTML = "OPPONENT TURN"
+            //swapRow("row8", "row1");
+            flipBoard();
         }
         else if(msg.data === "White") {
             playerType = "White";
@@ -129,9 +131,35 @@ function resolveMsg(msg) {
     }
 }
 
-swapRow("row8", "row1");
+//TODO animate rotations
+function flipBoard() {
+    let tiles = document.querySelectorAll(".chess-board td");
+    let coords = document.querySelectorAll(".chess-board th");
+    let whiteLetters = document.querySelectorAll("#white-letters th");
+    let blackLetters = document.querySelectorAll("#black-letters th");
+    board.style.transform = "rotateY(180deg) rotateX(180deg)";
+
+    for (tile of tiles) {
+        tile.style.transform = "rotateX(180deg) rotateY(180deg)";
+    }
+    for (coord of coords) {
+        coord.style.transform = "rotateX(180deg) rotateY(180deg)";
+    }
+    for (let i=0; i < whiteLetters.length; i++) {
+        blackLetters[i].innerHTML = whiteLetters[i].innerHTML;
+        whiteLetters[i].innerHTML = "";
+    }
+    for (let i=1; i < 9; i++) {
+        let orig = document.querySelector("#white"+i);
+        let replace = document.querySelector("#black"+i);
+        console.log(orig.innerHTML+" " + replace.innerHTML);
+        replace.innerHTML = orig.innerHTML;
+        orig.innerHTML = "";
+    }
+}
+
 function swapRow(target, replacer){
-    //target is the element you want to swipe with 'replacer' element
+    //target is the element you want to swap with 'replacer' element
     //target and replacer parameters are STRING IDS (e.g "row 2" and "row 4") "row 2" will take palce of row 4 and row 4 will take place of row 2 
     let targetVar = document.querySelector("#"+target);
     let replacerVar = document.querySelector("#"+replacer); 

@@ -38,7 +38,19 @@
 
         <table class="chess-board">
             <tbody id="rows">
+                <tr id="black-letters">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
                 <tr id="row8">
+                    <th id="black8"></th>
                     <td class="white" id="a8"><img src="images/chess/black_rook.png" draggable="false" id="black_rook1"></td> 
                     <td class="black" id="b8"><img src="images/chess/black_knight.png" draggable="false" id="black_knight1"></td>
                     <td class="white" id="c8"><img src="images/chess/black_bishop.png" draggable="false" id="black_bishop1"></td>
@@ -47,10 +59,11 @@
                     <td class="black" id="f8"><img src="images/chess/black_bishop.png" draggable="false" id="black_bishop2"></td>
                     <td class="white" id="g8"><img src="images/chess/black_knight.png" draggable="false" id="black_knight2"></td>
                     <td class="black" id="h8"><img src="images/chess/black_rook.png" draggable="false" id="black_rook2"></td>
-                    <th>8</th>
+                    <th id="white8">8</th>
 
                 </tr>
                 <tr id="row7">
+                    <th id="black7"></th>
                     <td class="black" id="a7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn1"></td>
                     <td class="white" id="b7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn2"></td>
                     <td class="black" id="c7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn3"></td>
@@ -59,10 +72,11 @@
                     <td class="white" id="f7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn6"></td>
                     <td class="black" id="g7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn7"></td>
                     <td class="white" id="h7"><img src="images/chess/black_pawn.png" draggable="false" id="black_pawn8"></td>
-                    <th>7</th>
+                    <th id="white7">7</th>
 
                 </tr>
                 <tr id="row6">
+                    <th id="black6"></th>
                     <td class="white" id="a6"></td>
                     <td class="black" id="b6"></td>
                     <td class="white" id="c6"></td>
@@ -71,10 +85,11 @@
                     <td class="black" id="f6"></td>
                     <td class="white" id="g6"></td>
                     <td class="black" id="h6"></td>
-                    <th>6</th>
+                    <th id="white6">6</th>
 
                 </tr>
                 <tr id="row5">
+                    <th id="black5"></th>
                     <td class="black" id="a5"></td>
                     <td class="white" id="b5"></td>
                     <td class="black" id="c5"></td>
@@ -83,10 +98,11 @@
                     <td class="white" id="f5"></td>
                     <td class="black" id="g5"></td>
                     <td class="white" id="h5"></td>
-                    <th>5</th>
+                    <th id="white5">5</th>
 
                 </tr>
                 <tr id="row4">
+                    <th id="black4"></th>
                     <td class="white" id="a4"></td>
                     <td class="black" id="b4"></td>
                     <td class="white" id="c4"></td>
@@ -95,10 +111,11 @@
                     <td class="black" id="f4"></td>
                     <td class="white" id="g4"></td>
                     <td class="black" id="h4"></td>
-                    <th>4</th>
+                    <th id="white4">4</th>
 
                 </tr>
                 <tr id="row3">
+                    <th id="black3"></th>
                     <td class="black" id="a3"></td>
                     <td class="white" id="b3"></td>
                     <td class="black" id="c3"></td>
@@ -107,10 +124,11 @@
                     <td class="white" id="f3"></td>
                     <td class="black" id="g3"></td>
                     <td class="white" id="h3"></td>
-                    <th>3</th>
+                    <th id="white3">3</th>
 
                 </tr>
                 <tr id="row2">
+                    <th id="black2"></th>
                     <td class="white" id="a2"><img src="images/chess/white_pawn.png" draggable="false"  id="white_pawn1"></td>
                     <td class="black" id="b2"><img src="images/chess/white_pawn.png" draggable="false"  id="white_pawn2"></td>
                     <td class="white" id="c2"><img src="images/chess/white_pawn.png" draggable="false" id="white_pawn3"></td>
@@ -119,10 +137,11 @@
                     <td class="black" id="f2"><img src="images/chess/white_pawn.png" draggable="false" id="white_pawn6"></td>
                     <td class="white" id="g2"><img src="images/chess/white_pawn.png" draggable="false" id="white_pawn7"></td>
                     <td class="black" id="h2"><img src="images/chess/white_pawn.png" draggable="false" id="white_pawn8"></td>
-                    <th>2</th>
+                    <th id="white2">2</th>
 
                 </tr>
                 <tr id="row1">
+                    <th id="black1"></th>
                     <td class="black" id="a1"><img src="images/chess/white_rook.png" draggable="false"  id="white_rook1"></td>
                     <td class="white" id="b1"><img src="images/chess/white_knight.png" draggable="false" id="white_knight1"></td>
                     <td class="black" id="c1"><img src="images/chess/white_bishop.png" draggable="false" id="white_bishop1"></td>
@@ -131,18 +150,19 @@
                     <td class="white" id="f1"><img src="images/chess/white_bishop.png" draggable="false" id="white_bishop2"></td>
                     <td class="black" id="g1"><img src="images/chess/white_knight.png" draggable="false" id="white_knight2"></td>
                     <td class="white" id="h1"><img src="images/chess/white_rook.png" draggable="false" id="white_rook2"></td>
-                    <th>1</th>
-
+                    <th id="white1">1</th>
                 </tr>
-                <tr>
-                    <th>a</th>
-                    <th>b</th>
-                    <th>c</th>
-                    <th>d</th>
-                    <th>e</th>
-                    <th>f</th>
-                    <th>g</th>
-                    <th>h</th>
+                
+                <tr id="white-letters">
+                    <th></th>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>C</th>
+                    <th>D</th>
+                    <th>E</th>
+                    <th>F</th>
+                    <th>G</th>
+                    <th>H</th>
                 </tr>
             </tbody>
         </table>
