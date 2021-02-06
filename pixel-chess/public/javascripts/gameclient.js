@@ -129,6 +129,18 @@ function resolveMsg(msg) {
     }
 }
 
+swapRow("row8", "row1");
+function swapRow(target, replacer){
+    //target is the element you want to swipe with 'replacer' element
+    //target and replacer parameters are STRING IDS (e.g "row 2" and "row 4") "row 2" will take palce of row 4 and row 4 will take place of row 2 
+    let targetVar = document.querySelector("#"+target);
+    let replacerVar = document.querySelector("#"+replacer); 
+    let temp = targetVar;
+    let parent = document.querySelector("#rows");
+    
+    parent.replaceChild(replacerVar, targetVar);
+}
+
 //reset all possibleMoves if another cell is selected!
 //send move to server if possibleMove cell is selected after click on a piece
 var pieceSelected = false;
