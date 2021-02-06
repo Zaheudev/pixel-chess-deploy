@@ -34,7 +34,7 @@ function resolveMsg(msg) {
                 e.style.backgroundColor = "red";
                 possible.push(e.id);
             }else {
-                e.style.backgroundColor = "green";
+                e.style.backgroundColor = "green";              
                 possible.push(e.id);
             }
         }
@@ -49,6 +49,9 @@ function resolveMsg(msg) {
                 if(to.firstElementChild.nodeName === "IMG"){
                     pieceCaptured = to.firstElementChild;
                     let imgPlace = document.querySelector("#G"+piecesGainedCounter);
+                    if (playerType === "Black") {
+                        imgPlace.style.transform = "rotateX(180deg) rotateY(180deg)"
+                    }
                     imgPlace.append(pieceCaptured);
                 }
             }
@@ -74,7 +77,11 @@ function resolveMsg(msg) {
             piecesLostCounter++;
             if(to.firstElementChild.nodeName === "IMG"){
                 pieceCaptured = to.firstElementChild;
+                // pieceCaptured.style.transform = "rotateX(180deg) rotateY(180deg)";
                 let imgPlace = document.querySelector("#l"+piecesLostCounter);
+                if (playerType === "Black") {
+                        imgPlace.style.transform = "rotateX(180deg) rotateY(180deg)"
+                    }
                 imgPlace.append(pieceCaptured);
             }
         }
@@ -134,7 +141,7 @@ function resolveMsg(msg) {
 
 //TODO animate rotations
 function flipBoard() {
-    let tiles = document.querySelectorAll(".chess-board td");
+    let tiles = document.querySelectorAll(".chess-board td img");
     let coords = document.querySelectorAll(".chess-board th");
     let whiteLetters = document.querySelectorAll("#white-letters th");
     let blackLetters = document.querySelectorAll("#black-letters th");

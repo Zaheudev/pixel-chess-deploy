@@ -23,8 +23,8 @@
 
 .chess-board td  {
     text-align:center;
-    margin:auto;
     user-select: none;
+    margin: auto;
 }
 
 .chess-board th {
@@ -41,9 +41,8 @@
 }
 
 .chess-board td:hover {
-    position: absolute;
-    border-color: green;
-    border-width: 2.5px;
+    position:absolute;
+    border: solid green 2.5px;
     cursor: pointer;
     user-select: none;
 }
