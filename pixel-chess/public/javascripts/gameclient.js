@@ -58,7 +58,7 @@ function resolveMsg(msg) {
             const elem = document.createElement('p');
             elem.appendChild(document.createTextNode(`${from.id};${to.id}`));
             historyDiv.appendChild(elem);
-            turnText.firstElementChild.innerHTML = "OPPONENT TURN";
+            turnText.firstElementChild.innerHTML = "OPPONENT'S TURN";
         }
         break;
     case "turn":
@@ -108,12 +108,13 @@ function resolveMsg(msg) {
         console.log(msg.data);
         if(msg.data === "Black") {
             playerType = "Black";
-            turnText.firstElementChild.innerHTML = "OPPONENT TURN"
+            turnText.firstElementChild.innerHTML = "OPPONENT'S TURN"
             //swapRow("row8", "row1");
             flipBoard();
         }
         else if(msg.data === "White") {
             playerType = "White";
+            turnText.firstElementChild.innerHTML = "YOUR TURN"
         }
         //TODO, flip board depending on color
         break;
@@ -156,17 +157,6 @@ function flipBoard() {
         replace.innerHTML = orig.innerHTML;
         orig.innerHTML = "";
     }
-}
-
-function swapRow(target, replacer){
-    //target is the element you want to swap with 'replacer' element
-    //target and replacer parameters are STRING IDS (e.g "row 2" and "row 4") "row 2" will take palce of row 4 and row 4 will take place of row 2 
-    let targetVar = document.querySelector("#"+target);
-    let replacerVar = document.querySelector("#"+replacer); 
-    let temp = targetVar;
-    let parent = document.querySelector("#rows");
-    
-    parent.replaceChild(replacerVar, targetVar);
 }
 
 //reset all possibleMoves if another cell is selected!

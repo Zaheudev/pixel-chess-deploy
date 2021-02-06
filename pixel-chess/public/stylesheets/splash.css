@@ -1,18 +1,39 @@
+@font-face {
+    font-family: PixelEmulator;
+    src: url(../fonts/pixelemulator.woff);
+}
+
+@font-face {
+    font-family: Pixeboy;
+    src: url(../fonts/pixeboy.woff);
+}
+@font-face {
+    font-family: AncientModernTales;
+    src: url(../fonts/ancientmoderntales.woff);
+}
+
 h1 {
-    font-size:2cm;
+    font-family: AncientModernTales;
+    font-size:10em;
     text-align: center;
     margin: auto;
+    user-select: none;
 }
 
 .right-horse{
-    position: fixed;
+    position: absolute;
     right: 100px;
 }
 
 #buttons {
     text-align:center;
     position: absolute;
-    right:50%;
+    right:40%;
     top: 30%;
-    margin:auto;
+    margin: auto;
+}
+
+#buttons button, input {
+    font-family: Pixeboy;
+    font-size:5em;
 }

@@ -1,3 +1,17 @@
+@font-face {
+    font-family: PixelEmulator;
+    src: url(../fonts/pixelemulator.woff);
+}
+
+@font-face {
+    font-family: Pixeboy;
+    src: url(../fonts/pixeboy.woff);
+}
+@font-face {
+    font-family: AncientModernTales;
+    src: url(../fonts/ancientmoderntales.woff);
+}
+
 .chess-board { user-select: none; border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-right: auto; }
             .chess-board th { padding: .5em; }
             .chess-board td { border: 1px solid; width: 4em; height: 4em; }
@@ -10,12 +24,20 @@
 .chess-board td  {
     text-align:center;
     margin:auto;
+    user-select: none;
+}
+
+.chess-board th {
+    font-family: PixelEmulator;
+    font-size: 1em;
 }
 
 .chess-board td > img {
     height: 40px;
     width: 40px;
     user-select: none;
+    -webkit-user-drag: none;
+    -moz-user-select: none;
 }
 
 .chess-board td:hover {
@@ -23,9 +45,13 @@
     border-color: green;
     border-width: 2.5px;
     cursor: pointer;
+    user-select: none;
 }
 
 #table1{
+    font-family: Pixeboy;
+    font-size: 2em;
+    user-select: none;
     position: absolute;
     margin:auto;
     left: 75%;
@@ -33,14 +59,19 @@
 }
 
 #table2{
+    font-family: Pixeboy;
+    font-size: 2em;
+    user-select: none;
     position: absolute;
     margin:auto;
     left: 75%;
     bottom: 45%;
 }
 
-#state h1{
+#state {
+    font-family: PixelEmulator;
     text-align: center;
+    user-select: none;
 }
 
 #right img {
@@ -74,6 +105,9 @@
 }
 
 #turn{
+    font-family: PixelEmulator;
+    font-size: 1.5em;
+    user-select: none;
     position: absolute;
     bottom: 40%;
     color: grey;
