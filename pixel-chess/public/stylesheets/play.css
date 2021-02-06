@@ -3,9 +3,9 @@
             .chess-board td { border: 1px solid; width: 4em; height: 4em; }
             .chess-board .white { background: #eee; }
             .chess-board .black { background: #000; }
-            #right table {border: 1px solid;}
-            #right th { padding: .5em;}
-            #right td {border: 1px solid; width: 2em; height: 2em;}
+            /* #right table {border: 1px solid;} */
+            /* #right th { padding: .5em;} */
+            /* #right td {border: 1px solid; width: 2em; height: 2em;} */
 
 .chess-board td  {
     text-align:center;
@@ -25,7 +25,14 @@
     cursor: pointer;
 }
 
-#right{
+#table1{
+    position: absolute;
+    margin:auto;
+    left: 75%;
+    bottom: 75%;
+}
+
+#table2{
     position: absolute;
     margin:auto;
     left: 75%;
@@ -36,6 +43,11 @@
     text-align: center;
 }
 
+#right img {
+    height: 40px;
+    width:40px;
+}
+
 .history{
     position: absolute;
     left:2cm;
@@ -44,7 +56,7 @@
 }
 
 .history h2{
-    margin: 0;
+    margin: 10%;
 }
 
 .history p{

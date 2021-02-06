@@ -4,11 +4,15 @@ const board = document.querySelector(".chess-board");
 const state = document.querySelector("#state h1");
 const historyDiv = document.querySelector("#historyElements");
 const turnText = document.querySelector("#turn");
+const piecesgained = document.querySelector("#pieces-gained"); 
+const pieceslost = document.querySelector("#pieces-lost"); 
 
 var possiblePieces = [];
 var possibleMoves = [];
 var playerType = "";
-
+var pieceCaptured = null;
+var piecesGainedCounter = -1;
+var piecesLostCounter = -1;
 
 //parse JSON messages, depending on message.type, resolve message
 client.onmessage = function (event) {
@@ -18,6 +22,7 @@ client.onmessage = function (event) {
 }
 
 var possible = [];
+var img = null;
 function resolveMsg(msg) {
     switch(msg.type) {
     case "possibleMoves":
@@ -39,8 +44,17 @@ function resolveMsg(msg) {
         if(msg.data == "valid") {
             let from = document.getElementById(cell1);
             let to = document.getElementById(cell2);
+            if(to.hasChildNodes()){
+                piecesGainedCounter++;
+                if(to.firstElementChild.nodeName === "IMG"){
+                    pieceCaptured = to.firstElementChild;
+                    let imgPlace = document.querySelector("#G"+piecesGainedCounter);
+                    imgPlace.append(pieceCaptured);
+                }
+            }
             to.innerHTML = from.innerHTML;
             from.innerHTML = '';
+            historyDiv.parentElement.firstElementChild.innerHTML = "MOVES!";
             const elem = document.createElement('p');
             elem.appendChild(document.createTextNode(`${from.id};${to.id}`));
             historyDiv.appendChild(elem);
@@ -56,8 +70,17 @@ function resolveMsg(msg) {
         console.log("Opponent's move is: "+msg.data.from+";"+msg.data.to);
         let from = document.getElementById(msg.data.from);
         let to = document.getElementById(msg.data.to);
+        if(to.hasChildNodes()){
+            piecesLostCounter++;
+            if(to.firstElementChild.nodeName === "IMG"){
+                pieceCaptured = to.firstElementChild;
+                let imgPlace = document.querySelector("#l"+piecesLostCounter);
+                imgPlace.append(pieceCaptured);
+            }
+        }
         to.innerHTML = from.innerHTML;
         from.innerHTML = '';
+        historyDiv.parentElement.firstElementChild.innerHTML = "MOVES!";
         const elem = document.createElement('p');
         elem.appendChild(document.createTextNode(`${from.id};${to.id}`));
         historyDiv.appendChild(elem);
