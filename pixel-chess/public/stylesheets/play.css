@@ -80,23 +80,25 @@
 
 .history{
     position: absolute;
-    left:2cm;
-    top: 27%;
+    left:7cm;
+    top: 20%;
     text-align: center;
 }
 
 .history h2{
     margin: 10%;
+    font-family: PixelEmulator;
 }
 
 .history p{
     margin: 5%;
+    font-family: PixelEmulator;
 }
 
 #historyElements{
     border-width: 3px;
     width:2.5cm;
-    height:5cm;
+    height:3cm;
     left:1cm;
     border-color: black;
     overflow: auto;
@@ -111,4 +113,37 @@
     bottom: 40%;
     color: grey;
     left: 5%;
+}
+
+#darkmode{
+    position: absolute;
+    left: 90%;
+}
+
+#darkmode button{
+    font-family: PixelEmulator;
+    text-align: center;
+    font-size: 15px;
+    color:white;
+    background: black;
+    border-radius:13px;
+    width: 122px;
+    height: 40px;
+}
+
+#quitBtn{
+    position: absolute;
+    top: 80%;
+    right: 45%;
+}
+
+#quitBtn button{
+    font-family: PixelEmulator;
+    text-align: center;
+    font-size: 25px;
+    color: white;
+    background: black;
+    border-radius:13px;
+    width: 135px;
+    height: 50px;
 }

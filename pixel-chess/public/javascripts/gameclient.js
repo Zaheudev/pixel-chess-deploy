@@ -60,7 +60,7 @@ function resolveMsg(msg) {
             historyDiv.parentElement.firstElementChild.innerHTML = "MOVES!";
             const elem = document.createElement('p');
             elem.appendChild(document.createTextNode(`${from.id};${to.id}`));
-            historyDiv.appendChild(elem);
+            historyDiv.insertBefore(elem, historyDiv.firstElementChild);
             turnText.firstElementChild.innerHTML = "OPPONENT'S TURN";
         }
         break;
@@ -90,8 +90,8 @@ function resolveMsg(msg) {
         historyDiv.parentElement.firstElementChild.innerHTML = "MOVES!";
         const elem = document.createElement('p');
         elem.appendChild(document.createTextNode(`${from.id};${to.id}`));
-        historyDiv.appendChild(elem);
-        turnText.firstElementChild.innerHTML = "YOUR TURN";
+        historyDiv.insertBefore(elem, historyDiv.firstElementChild);
+        turnText.firstElementChild.innerHTML = "IT'S YOUR TURN";
         break;
     case "check":
         console.log("You're in check!");
@@ -121,7 +121,7 @@ function resolveMsg(msg) {
         }
         else if(msg.data === "White") {
             playerType = "White";
-            turnText.firstElementChild.innerHTML = "YOUR TURN"
+            turnText.firstElementChild.innerHTML = "IT'S YOUR TURN"
         }
         //TODO, flip board depending on color
         break;
