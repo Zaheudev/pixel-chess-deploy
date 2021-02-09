@@ -12,9 +12,9 @@
     src: url(../fonts/ancientmoderntales.woff);
 }
 
-.chess-board { user-select: none; border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-right: auto; }
+.chess-board {user-select: none; border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-right: auto; }
             .chess-board th { padding: .5em; }
-            .chess-board td { border: 1px solid; width: 4em; height: 4em; }
+            .chess-board td { border: 1px black solid; width: 4em; height: 4em; }
             .chess-board .white { background: #eee; }
             .chess-board .black { background: #000; }
             /* #right table {border: 1px solid;} */
@@ -111,7 +111,7 @@
     user-select: none;
     position: absolute;
     bottom: 40%;
-    color: grey;
+    color: black;
     left: 5%;
 }
 

@@ -5,7 +5,8 @@ const state = document.querySelector("#state h1");
 const historyDiv = document.querySelector("#historyElements");
 const turnText = document.querySelector("#turn");
 const piecesgained = document.querySelector("#pieces-gained"); 
-const pieceslost = document.querySelector("#pieces-lost"); 
+const pieceslost = document.querySelector("#pieces-lost");
+
 
 var possiblePieces = [];
 var possibleMoves = [];
