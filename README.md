@@ -12,6 +12,7 @@ An online chess game created with Node.js and Websockets
 git clone https://github.com/Vel1khan/pixel-chess.git
 cd pixel-chess
 cd pixel-chess
+npm install
 npm start
 ```
 #### By default, it will be accessible on localhost:3000. To change the port, access package.json and modify 
