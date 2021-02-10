@@ -7,7 +7,6 @@ const quit = document.querySelector("#quitBtn");
 const tableCell = document.querySelectorAll(".chess-board td");
 
 var page = location.pathname.substring(location.pathname.lastIndexOf("/") + 1);
-console.log(page);
 
 //false = light mode, true = darkmode
 let toggle = false;
@@ -132,4 +131,3 @@ function fadeFontColor(element, startColor, endColor, steps) {
         }
     }, 5);
 }
-

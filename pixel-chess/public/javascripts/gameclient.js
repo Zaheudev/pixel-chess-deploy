@@ -4,9 +4,6 @@ const board = document.querySelector(".chess-board");
 const state = document.querySelector("#state h1");
 const historyDiv = document.querySelector("#historyElements");
 const turnText = document.querySelector("#turn");
-const piecesgained = document.querySelector("#pieces-gained"); 
-const pieceslost = document.querySelector("#pieces-lost");
-
 
 var possiblePieces = [];
 var possibleMoves = [];
@@ -62,6 +59,7 @@ function resolveMsg(msg) {
             const elem = document.createElement('p');
             elem.appendChild(document.createTextNode(`${from.id};${to.id}`));
             historyDiv.insertBefore(elem, historyDiv.firstElementChild);
+            elem.style.color = historyDiv.parentElement.firstElementChild.style.color;
             turnText.firstElementChild.innerHTML = "OPPONENT'S TURN";
         }
         break;
@@ -92,6 +90,7 @@ function resolveMsg(msg) {
         const elem = document.createElement('p');
         elem.appendChild(document.createTextNode(`${from.id};${to.id}`));
         historyDiv.insertBefore(elem, historyDiv.firstElementChild);
+        elem.style.color = historyDiv.parentElement.firstElementChild.style.color;
         turnText.firstElementChild.innerHTML = "IT'S YOUR TURN";
         break;
     case "check":
