@@ -72,6 +72,8 @@ h1 {
     font-family: Pixeboy;
     margin:15px;
     box-shadow:0 0 7px black;
+    color:white;
+    background: black;
     cursor: pointer;
     border-radius:13px;
     font-size:5em;

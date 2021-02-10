@@ -6,6 +6,9 @@ const darkbutton = document.querySelector("#darkmode");
 const quit = document.querySelector("#quitBtn");
 const tableCell = document.querySelectorAll(".chess-board td");
 
+var page = location.pathname.substring(location.pathname.lastIndexOf("/") + 1);
+console.log(page);
+
 //false = light mode, true = darkmode
 let toggle = false;
 
@@ -15,11 +18,13 @@ darkbutton.addEventListener("click", function() {
     let h3 = document.querySelectorAll("h3");
     let p = document.querySelectorAll("p");
     let th = document.querySelectorAll(".chess-board th");
+    let buttons = document.querySelectorAll("button");
+
     if (toggle === false) {
         toggle = true;
         //document.body.style.backgroundColor = "Black";
         fadeBackground(document.body, [255,255,255], [0,0,0], 250);
-        timer.style.color = "White";
+        // timer.style.color = "White";
         h1.forEach(function(e) {
             //e.style.color = "White";
             fadeFontColor(e, [0,0,0], [255,255,255], 250);
@@ -39,12 +44,22 @@ darkbutton.addEventListener("click", function() {
         th.forEach(function(e) {
             //e.style.color = "White";
             fadeFontColor(e, [0,0,0], [255,255,255], 250);
+        })
+        buttons.forEach(function(e) {
+            //e.style.color = "White";
+            fadeFontColor(e, [255,255,255], [0,0,0], 250);
+            fadeBackground(e, [0,0,0], [255,255,255], 250);
+            if(page != "play"){
+                let form =  document.querySelector("input");
+                fadeBackground(form, [0,0,0], [255,255,255], 250);
+                fadeFontColor(form, [255,255,255], [0,0,0], 250);
+            }
         })
     }
     else {
         toggle = false;
         fadeBackground(document.body, [0,0,0], [255,255,255], 250);
-        timer.style.color = "";
+        // timer.style.color = "";
         h1.forEach(function(e) {
             //e.style.color = "";
             fadeFontColor(e, [255,255,255], [0,0,0], 250);
@@ -64,6 +79,16 @@ darkbutton.addEventListener("click", function() {
         th.forEach(function(e) {
             //e.style.color = "";
             fadeFontColor(e, [255,255,255], [0,0,0], 250);
+        })
+        buttons.forEach(function(e) {
+            //e.style.color = "";
+            fadeFontColor(e, [0,0,0], [255,255,255], 250);
+            fadeBackground(e, [255,255,255], [0,0,0], 250);
+            if(page != "play"){
+                let form =  document.querySelector("input");
+                fadeBackground(form, [255,255,255], [0,0,0], 250);
+                fadeFontColor(form, [0,0,0], [255,255,255], 250);
+            }
         })
     }
 })
@@ -107,5 +132,4 @@ function fadeFontColor(element, startColor, endColor, steps) {
         }
     }, 5);
 }
-
 
