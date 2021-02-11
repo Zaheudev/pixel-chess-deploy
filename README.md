@@ -24,7 +24,7 @@ npm start
 ### Server
 - [ ] When a player disconnects, the winning player is not correctly determined and the win message is not sent.
 - [ ] No websocket heartbeat implementation to abort games when player disconnects unexpectedly. 
-- [ ] Aborted/completed games are not cleaned up from the currentGames array. 
+- [x] Aborted/completed games are not cleaned up from the currentGames array. 
 ### Client
 - [ ] When hovering over Cell A8, the chess table moves very slightly to the right.
 Has to do with it being the 1st cell in the table, thus when hovering over it,
