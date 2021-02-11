@@ -146,3 +146,40 @@
     width: 135px;
     height: 50px;
 }
+
+#center div{
+    position: absolute;
+    width: 400px;
+    height: 200px;
+    bottom: 50%;
+    left: 40%;
+    color: white;
+    border: 2px;
+    border-style: solid;
+    border-color: white;
+    border-radius: 13px;
+    background-color: black;
+    text-align: center;
+}
+
+#center button{
+    font-family: PixelEmulator;
+    border-radius:13px;
+    width: 100px;
+    height: 40px;
+    font-size: 25px;
+}
+
+#center h1{
+    font-family: PixelEmulator;
+    /* color: brown; */
+    margin: 10px;
+    font-size: 35px;
+}
+
+#center p{
+    font-family: PixelEmulator;
+    /* color:green; */
+    margin: 25px;
+    font-size: 25px;
+}

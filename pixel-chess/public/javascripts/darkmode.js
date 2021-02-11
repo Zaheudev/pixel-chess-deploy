@@ -18,6 +18,7 @@ darkbutton.addEventListener("click", function() {
     let p = document.querySelectorAll("p");
     let th = document.querySelectorAll(".chess-board th");
     let buttons = document.querySelectorAll("button");
+    let panels = document.querySelectorAll("#center div");
 
     if (toggle === false) {
         toggle = true;
@@ -26,7 +27,9 @@ darkbutton.addEventListener("click", function() {
         // timer.style.color = "White";
         h1.forEach(function(e) {
             //e.style.color = "White";
-            fadeFontColor(e, [0,0,0], [255,255,255], 250);
+            if(e.id != "private"){
+                fadeFontColor(e, [0,0,0], [255,255,255], 250);                
+            }
         })
         h2.forEach(function(e) {
             //e.style.color = "White";
@@ -38,7 +41,9 @@ darkbutton.addEventListener("click", function() {
         })
         p.forEach(function(e) {
             //e.style.color = "White";
-            fadeFontColor(e, [0,0,0], [255,255,255], 250);
+            if(e.id != "private"){
+                fadeFontColor(e, [0,0,0], [255,255,255], 250);
+            }
         })
         th.forEach(function(e) {
             //e.style.color = "White";
@@ -54,6 +59,13 @@ darkbutton.addEventListener("click", function() {
                 fadeFontColor(form, [255,255,255], [0,0,0], 250);
             }
         })
+        panels.forEach(function(e) {
+            if(page === "play"){
+                fadeFontColor(e, [255,255,255], [0,0,0], 250);
+                fadeBackground(e, [0,0,0], [255,255,255], 250);
+                fadeBorderColor(e, [255,255,255], [0,0,0], 250);
+            }
+        })
     }
     else {
         toggle = false;
@@ -61,7 +73,9 @@ darkbutton.addEventListener("click", function() {
         // timer.style.color = "";
         h1.forEach(function(e) {
             //e.style.color = "";
-            fadeFontColor(e, [255,255,255], [0,0,0], 250);
+            if(e.id != "private"){
+                fadeFontColor(e, [255,255,255], [0,0,0], 250);
+            }
         })
         h2.forEach(function(e) {
             //e.style.color = "";
@@ -73,7 +87,9 @@ darkbutton.addEventListener("click", function() {
         })
         p.forEach(function(e) {
             //e.style.color = "";
-            fadeFontColor(e, [255,255,255], [0,0,0], 250);
+            if(e.id != "private"){
+                fadeFontColor(e, [255,255,255], [0,0,0], 250);
+            }
         })
         th.forEach(function(e) {
             //e.style.color = "";
@@ -87,6 +103,13 @@ darkbutton.addEventListener("click", function() {
                 let form =  document.querySelector("input");
                 fadeBackground(form, [255,255,255], [0,0,0], 250);
                 fadeFontColor(form, [0,0,0], [255,255,255], 250);
+            }
+        })
+        panels.forEach(function(e) {
+            if(page === "play"){
+                fadeFontColor(e, [0,0,0], [255,255,255], 250);
+                fadeBackground(e, [255,255,255], [0,0,0], 250);
+                fadeBorderColor(e, [0,0,0], [255,255,255], 250);
             }
         })
     }
@@ -127,6 +150,26 @@ function fadeFontColor(element, startColor, endColor, steps) {
         stepCount++;
         if (stepCount >= steps) {
             element.style.color = "rgb(" + endColor.toString() + ")";
+            clearInterval(fadeTimer);
+        }
+    }, 5);
+}
+
+function fadeBorderColor(element, startColor, endColor, steps) {
+    let stepCount = 0;
+    let currentColor = startColor;
+    let redChange = (startColor[0] - endColor[0]) / steps;
+    let greenChange = (startColor[1] - endColor[1]) / steps;
+    let blueChange = (startColor[2] - endColor[2]) / steps;
+
+    let fadeTimer = setInterval(function() {
+        currentColor[0] = parseInt(currentColor[0] - redChange);
+        currentColor[1] = parseInt(currentColor[1] - greenChange);
+        currentColor[2] = parseInt(currentColor[2] - blueChange);
+        element.style.borderColor = "rgb(" + currentColor.toString() + ")";
+        stepCount++;
+        if (stepCount >= steps) {
+            element.style.borderColor = "rgb(" + endColor.toString() + ")";
             clearInterval(fadeTimer);
         }
     }, 5);

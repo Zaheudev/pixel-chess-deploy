@@ -164,6 +164,25 @@
                 </tr>
             </tbody>
         </table>
+        <section id="center">
+            <div id="opponentLeftPanel" style="display:block;">
+                <h1 id="private">OPPONENT LEFT!</h1>
+                <p id="private">YOU WON!</p>
+                <button onclick="this.parentElement.style.display='none'" id="exit">OKAY</button>
+            </div>
+
+            <div id="youWonPanel" style="display:block;">
+                <h1 id="private">CONGRATS!</h1>
+                <p id="private">YOU WON!</p>
+                <button onclick="this.parentElement.style.display='none'" id="exit">OKAY</button>
+            </div>
+
+            <div id="youLostPanel" style="display:block;">
+                <h1 id="private">YOU DUMB!</h1>
+                <p id="private">OPPONENT WON!</p>
+                <button onclick="this.parentElement.style.display='none'" id="exit">OKAY</button>
+            </div>
+        </section>
         <section id="right">
             <div id = table1>
                 <h3>Pieces Lost</h3>
