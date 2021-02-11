@@ -125,6 +125,7 @@ wsServer.on("connection", function(ws) {
             //check for GAME OVER after move
             if (currentGame.getChess().game_over()) {
               status.incCompleted();
+              currentGames.delete(currentGame.getId());
               if (currentGame.getChess().in_checkmate()) {
                 if (con === currentGame.getWsWhite()) {
                   currentGame.setState("White");
@@ -142,6 +143,7 @@ wsServer.on("connection", function(ws) {
             currentGame.getChess().in_threefold_repetition() || currentGame.getChess().insufficient_material()){
               currentGame.setState("Draw");
               status.incCompleted();
+              currentGames.delete(currentGame.getId());
               currentGame.getWsWhite().send(JSON.stringify(new Message("draw")));
               currentGame.getWsBlack().send(JSON.stringify(new Message("draw")));
               currentGame.getWsWhite().close();
@@ -188,10 +190,12 @@ wsServer.on("connection", function(ws) {
       //canceled
       currentGame.setState("Aborted");
       status.incAborted();
+      currentGames.delete(currentGame.getId());
     }
     //TODO send GAME OVER message to client
     if(currentGame.getState() != "Started"){
       console.log(currentGame.getState());
+      currentGames.delete(currentGame.getId());
     }
   })
 })
