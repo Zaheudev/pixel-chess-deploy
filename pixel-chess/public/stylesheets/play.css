@@ -162,6 +162,10 @@
     text-align: center;
 }
 
+#timer {
+    font-family: PixelEmulator;
+}
+
 #center button{
     font-family: PixelEmulator;
     border-radius:13px;

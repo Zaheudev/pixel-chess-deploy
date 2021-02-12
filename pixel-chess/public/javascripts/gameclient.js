@@ -255,5 +255,4 @@ board.addEventListener('click', (e)=>{
             }
         }
     }
-
 });

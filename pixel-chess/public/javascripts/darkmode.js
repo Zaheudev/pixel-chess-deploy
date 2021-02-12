@@ -19,20 +19,27 @@ darkbutton.addEventListener("click", function() {
     let th = document.querySelectorAll(".chess-board th");
     let buttons = document.querySelectorAll("button");
     let panels = document.querySelectorAll("#center div");
+    let labels = document.querySelectorAll("#timer label");
 
     if (toggle === false) {
+        //BLACK
         toggle = true;
+
+        document.querySelector(".darkBtn").disabled = true;
+        setTimeout(() => {
+            document.querySelector(".darkBtn").disabled = false;
+        }, 1500);
+
         //document.body.style.backgroundColor = "Black";
         fadeBackground(document.body, [255,255,255], [0,0,0], 250);
         // timer.style.color = "White";
         h1.forEach(function(e) {
             //e.style.color = "White";
             if(e.id != "private"){
-                fadeFontColor(e, [0,0,0], [255,255,255], 250);                
+                fadeFontColor(e, [0,0,0], [255,255,255], 250);
             }
         })
         h2.forEach(function(e) {
-            //e.style.color = "White";
             fadeFontColor(e, [0,0,0], [255,255,255], 250);
         })
         h3.forEach(function(e) {
@@ -66,9 +73,21 @@ darkbutton.addEventListener("click", function() {
                 fadeBorderColor(e, [255,255,255], [0,0,0], 250);
             }
         })
+        labels.forEach(function(e) {
+            if(page === "play"){
+                fadeFontColor(e, [0,0,0], [255,255,255], 250);
+            }
+        })
     }
     else {
+        //WHITE
         toggle = false;
+
+        document.querySelector(".darkBtn").disabled = true;
+        setTimeout(() => {
+            document.querySelector(".darkBtn").disabled = false;
+        }, 1500);
+
         fadeBackground(document.body, [0,0,0], [255,255,255], 250);
         // timer.style.color = "";
         h1.forEach(function(e) {
@@ -110,6 +129,11 @@ darkbutton.addEventListener("click", function() {
                 fadeFontColor(e, [0,0,0], [255,255,255], 250);
                 fadeBackground(e, [255,255,255], [0,0,0], 250);
                 fadeBorderColor(e, [0,0,0], [255,255,255], 250);
+            }
+        })
+        labels.forEach(function(e) {
+            if(page === "play"){
+                fadeFontColor(e, [255,255,255], [0,0,0], 250);
             }
         })
     }
