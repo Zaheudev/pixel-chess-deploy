@@ -33,8 +33,8 @@ function Game(chess, wsWhite, id){
     "Waiting"
     "Aborted"
     "Started"
-    "White"
-    "Black"
+    "White" - White is a loser
+    "Black" - Black is a loser
     "Draw"
     */
     this.setState = function(state) {

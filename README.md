@@ -22,7 +22,7 @@ npm start
 
 ## Known Bugs
 ### Server
-- [ ] When a player disconnects, the winning player is not correctly determined and the win message is not sent.
+- [x] When a player disconnects, the winning player is not correctly determined and the win message is not sent.
 - [ ] No websocket heartbeat implementation to abort games when player disconnects unexpectedly. 
 - [x] Aborted/completed games are not cleaned up from the currentGames array. 
 ### Client

@@ -25,6 +25,7 @@ var websockets = new Map();
 var connectionID = 0;
 var status = new Status();
 var gamesInitialized = 0;
+var disconnected = 0;
 
 wsServer.on("connection", function(ws) {
   let con = ws;
@@ -171,20 +172,24 @@ wsServer.on("connection", function(ws) {
     }
   }
   })
-  let disconnected = false;
-  ws.on("close", function(code) {
+
+ws.on("close", function(code) {
     console.log(con.id + " has closed the connection" );
     let currentGame = websockets.get(con.id);
-    
-      if(currentGame.getState() != "Waiting") {
+
+    if(currentGame.getState() != "Waiting") {
        if(con === currentGame.getWsWhite()) {
-         currentGame.getWsBlack().close();
-         currentGame.setState('Black');
-       }
+          currentGame.getWsBlack().send(JSON.stringify(new Message("opponentLeft")));
+          currentGame.getWsBlack().close();
+          currentGame.setState('Black');
+          disconnected++;
+        }
        else {
-         currentGame.getWsWhite().close();
-         currentGame.setState('White');
-        } 
+          currentGame.getWsWhite().send(JSON.stringify(new Message("opponentLeft")));
+          currentGame.getWsWhite().close();
+          currentGame.setState('White');
+          disconnected++;
+        }
       }
     else {
       //canceled
@@ -192,8 +197,9 @@ wsServer.on("connection", function(ws) {
       status.incAborted();
       currentGames.delete(currentGame.getId());
     }
-    //TODO send GAME OVER message to client
-    if(currentGame.getState() != "Started"){
+
+    if(currentGame.getState() != "Started" && disconnected === 2){
+      disconnected = 0;
       console.log(currentGame.getState());
       currentGames.delete(currentGame.getId());
     }

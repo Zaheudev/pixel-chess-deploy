@@ -107,6 +107,30 @@ function resolveMsg(msg) {
     case "gameStart":
         console.log("Game has started");
         state.innerHTML = "Player joined. Game Started"
+        var minutesLabel = document.getElementById("minutes");
+        var secondsLabel = document.getElementById("seconds");
+        var totalSeconds = 0;
+        setInterval(setTime, 1000);
+
+        function setTime()
+        {
+            totalSeconds++;
+            secondsLabel.innerHTML = pad(totalSeconds%60);
+            minutesLabel.innerHTML = pad(parseInt(totalSeconds/60));
+        }
+
+        function pad(val)
+        {
+            var valString = val + "";
+            if(valString.length < 2)
+            {
+                return "0" + valString;
+            }
+            else
+            {
+                return valString;
+            }
+        }
         setTimeout(()=>{
             state.innerHTML = "";
         }, 5000)
@@ -125,8 +149,8 @@ function resolveMsg(msg) {
         }
         //TODO, flip board depending on color
         break;
-    case "player-disconnect":
-        console.log("Opponent disconnected");
+    case "opponentLeft":
+        console.log("opponentLeft");
         break;
     case "win":
         console.log("You WON!");
