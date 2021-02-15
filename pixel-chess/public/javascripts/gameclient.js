@@ -154,12 +154,12 @@ function resolveMsg(msg) {
         panel1.style.display = "block";
         console.log("opponentLeft");
         break;
-    case "win":
+    case "You Win":
         console.log("You WON!");
         let panel2 = document.querySelector("#youWonPanel");
         panel2.style.display = "block";
         break;
-    case "lose":
+    case "You Lost":
         console.log("You LOSE!");
         let panel3 = document.querySelector("#youLostPanel");
         panel3.style.display = "block";

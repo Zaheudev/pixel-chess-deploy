@@ -12,6 +12,30 @@
     src: url(../fonts/ancientmoderntales.woff);
 }
 
+@keyframes buttonAnim {
+    0% {
+      transform: scale3d(1, 1, 1);
+    }
+    30% {
+      transform: scale3d(1.25, 0.75, 1);
+    }
+    40% {
+      transform: scale3d(0.75, 1.25, 1);
+    }
+    50% {
+      transform: scale3d(1.15, 0.85, 1);
+    }
+    65% {
+      transform: scale3d(0.95, 1.05, 1);
+    }
+    75% {
+      transform: scale3d(1.05, 0.95, 1);
+    }
+    100% {
+      transform: scale3d(1, 1, 1);
+    }
+  }
+
 @keyframes glow {
 	0% {
 		text-shadow: none;
@@ -31,6 +55,19 @@
 	}
 }
 
+@keyframes TextAnim {
+    0% {
+      letter-spacing: -0.5em;
+      opacity: 0;
+    }
+    40% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
 h1 {
     font-family: AncientModernTales;
     font-size:10em;
@@ -39,7 +76,8 @@ h1 {
     user-select: none;
 
     text-shadow: none;
-	animation: glow 8s infinite;
+    animation: TextAnim 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) both, glow 7s infinite;
+
 }
 
 .right-horse{
@@ -77,4 +115,8 @@ h1 {
     cursor: pointer;
     border-radius:13px;
     font-size:5em;
+}
+
+button:hover,input:hover{
+    animation: buttonAnim 0.9s linear alternate both;
 }

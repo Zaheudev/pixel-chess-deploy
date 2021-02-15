@@ -20,6 +20,7 @@ darkbutton.addEventListener("click", function() {
     let buttons = document.querySelectorAll("button");
     let panels = document.querySelectorAll("#center div");
     let labels = document.querySelectorAll("#timer label");
+    let forms = document.querySelectorAll("input");
 
     if (toggle === false) {
         //BLACK
@@ -60,10 +61,15 @@ darkbutton.addEventListener("click", function() {
             //e.style.color = "White";
             fadeFontColor(e, [255,255,255], [0,0,0], 250);
             fadeBackground(e, [0,0,0], [255,255,255], 250);
-            if(page != "play"){
-                let form =  document.querySelector("input");
-                fadeBackground(form, [0,0,0], [255,255,255], 250);
-                fadeFontColor(form, [255,255,255], [0,0,0], 250);
+        })
+        forms.forEach(function(e){
+            if(e.id != "private"){
+                fadeBackground(e, [0,0,0], [255,255,255], 250);
+                fadeFontColor(e, [255,255,255], [0,0,0], 250);
+            }else{
+                fadeBackground(e, [255,255,255], [0,0,0], 250);
+                fadeFontColor(e, [0,0,0], [255,255,255], 250);
+
             }
         })
         panels.forEach(function(e) {
@@ -118,10 +124,14 @@ darkbutton.addEventListener("click", function() {
             //e.style.color = "";
             fadeFontColor(e, [0,0,0], [255,255,255], 250);
             fadeBackground(e, [255,255,255], [0,0,0], 250);
-            if(page != "play"){
-                let form =  document.querySelector("input");
-                fadeBackground(form, [255,255,255], [0,0,0], 250);
-                fadeFontColor(form, [0,0,0], [255,255,255], 250);
+        })
+        forms.forEach(function(e){
+            if(e.id != "private"){
+                fadeBackground(e, [255,255,255], [0,0,0], 250);
+                fadeFontColor(e, [0,0,0], [255,255,255], 250);
+            }else{
+                fadeBackground(e, [0,0,0], [255,255,255], 250);
+                fadeFontColor(e, [255,255,255], [0,0,0], 250);
             }
         })
         panels.forEach(function(e) {

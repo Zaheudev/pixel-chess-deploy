@@ -167,25 +167,33 @@
             <div id="opponentLeftPanel" style="display:none;">
                 <h1 id="private">OPPONENT LEFT!</h1>
                 <p id="private">YOU WON!</p>
-                <button onclick="this.parentElement.style.display='none'" id="exit">OKAY</button>
+                <form action="/" method="GET">
+                    <input id="private" onclick="this.parentElement.style.display='none'" type="submit" value="Okay!"/>
+                </form>
             </div>
 
             <div id="youWonPanel" style="display:none;">
                 <h1 id="private">CONGRATS!</h1>
                 <p id="private">YOU WON!</p>
-                <button onclick="this.parentElement.style.display='none'" id="exit">OKAY</button>
+                <form action="/" method="GET">
+                    <input id="private" onclick="this.parentElement.style.display='none'" type="submit" value="Okay!"/>
+                </form>
             </div>
 
             <div id="youLostPanel" style="display:none;">
                 <h1 id="private">YOU DUMB!</h1>
                 <p id="private">OPPONENT WON!</p>
-                <button onclick="this.parentElement.style.display='none'" id="exit">OKAY</button>
+                <form action="/" method="GET">
+                    <input id="private" onclick="this.parentElement.style.display='none'" type="submit" value="Okay!"/>
+                </form>
             </div>
 
             <div id="drawPanel" style="display:none;">
                 <h1 id="private">DRAW!</h1>
                 <p id="private">IT'S A DRAW!</p>
-                <button onclick="this.parentElement.style.display='none'" id="exit">OKAY</button>
+                <form action="/" method="GET">
+                    <input id="private" onclick="this.parentElement.style.display='none'" type="submit" value="Okay!"/>
+                </form>
             </div>
         </section>
         <section id="right">
@@ -254,7 +262,9 @@
             </div>
         </section>
         <footer id="quitBtn">
-            <button>QUIT</button>
+            <form action="/" method="GET">
+                <input type="submit" value="Quit!"/>
+            </form>
         </footer>
     </body>
     <script type="text/javascript" src="./javascripts/gameclient.js"></script>

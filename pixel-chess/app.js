@@ -126,16 +126,21 @@ wsServer.on("connection", function(ws) {
             //check for GAME OVER after move
             if (currentGame.getChess().game_over()) {
               status.incCompleted();
-              currentGames.delete(currentGame.getId());
               if (currentGame.getChess().in_checkmate()) {
                 if (con === currentGame.getWsWhite()) {
                   currentGame.setState("White");
+                  currentGame.getWsWhite().send(JSON.stringify(new Message("You Won")));
+                  currentGame.getWsBlack().send(JSON.stringify(new Message("You Lost")));
                   currentGame.getWsWhite().close();
                   currentGame.getWsBlack().close();
+                  currentGames.delete(currentGame.getId());
                 }else {
                   currentGame.setState("Black");
+                  currentGame.getWsBlack().send(JSON.stringify(new Message("You Won")));
+                  currentGame.getWsWhite().send(JSON.stringify(new Message("You Lost")));
                   currentGame.getWsWhite().close();
                   currentGame.getWsBlack().close();
+                  currentGames.delete(currentGame.getId());
                 }
               }
 
