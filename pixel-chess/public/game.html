@@ -29,10 +29,6 @@
                 </div>
             </div>
 
-            <div id="quitBtn">
-                <button>QUIT</button>
-            </div>
-
             <div id="turn">
                 <h1></h1>
             </div>
@@ -168,25 +164,25 @@
             </tbody>
         </table>
         <section id="center">
-            <div id="opponentLeftPanel" style="display:block;">
+            <div id="opponentLeftPanel" style="display:none;">
                 <h1 id="private">OPPONENT LEFT!</h1>
                 <p id="private">YOU WON!</p>
                 <button onclick="this.parentElement.style.display='none'" id="exit">OKAY</button>
             </div>
 
-            <div id="youWonPanel" style="display:block;">
+            <div id="youWonPanel" style="display:none;">
                 <h1 id="private">CONGRATS!</h1>
                 <p id="private">YOU WON!</p>
                 <button onclick="this.parentElement.style.display='none'" id="exit">OKAY</button>
             </div>
 
-            <div id="youLostPanel" style="display:block;">
+            <div id="youLostPanel" style="display:none;">
                 <h1 id="private">YOU DUMB!</h1>
                 <p id="private">OPPONENT WON!</p>
                 <button onclick="this.parentElement.style.display='none'" id="exit">OKAY</button>
             </div>
 
-            <div id="drawPanel" style="display:block;">
+            <div id="drawPanel" style="display:none;">
                 <h1 id="private">DRAW!</h1>
                 <p id="private">IT'S A DRAW!</p>
                 <button onclick="this.parentElement.style.display='none'" id="exit">OKAY</button>
@@ -257,6 +253,9 @@
             </table>
             </div>
         </section>
+        <footer id="quitBtn">
+            <button>QUIT</button>
+        </footer>
     </body>
     <script type="text/javascript" src="./javascripts/gameclient.js"></script>
     <script type="text/javascript" src="./javascripts/darkmode.js"></script>

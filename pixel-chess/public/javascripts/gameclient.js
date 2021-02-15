@@ -107,9 +107,9 @@ function resolveMsg(msg) {
     case "gameStart":
         console.log("Game has started");
         state.innerHTML = "Player joined. Game Started"
-        var minutesLabel = document.getElementById("minutes");
-        var secondsLabel = document.getElementById("seconds");
-        var totalSeconds = 0;
+        let minutesLabel = document.getElementById("minutes");
+        let secondsLabel = document.getElementById("seconds");
+        let totalSeconds = 0;
         setInterval(setTime, 1000);
 
         function setTime()
@@ -150,15 +150,23 @@ function resolveMsg(msg) {
         //TODO, flip board depending on color
         break;
     case "opponentLeft":
+        let panel1 = document.querySelector("#opponentLeftPanel");
+        panel1.style.display = "block";
         console.log("opponentLeft");
         break;
     case "win":
         console.log("You WON!");
+        let panel2 = document.querySelector("#youWonPanel");
+        panel2.style.display = "block";
         break;
     case "lose":
         console.log("You LOSE!");
+        let panel3 = document.querySelector("#youLostPanel");
+        panel3.style.display = "block";
         break;
     case "draw":
+        let panel4 = document.querySelector("#drawPanel");
+        panel4.style.display = "block";
         console.log("DRAW!")
     }
 }
