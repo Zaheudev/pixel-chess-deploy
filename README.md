@@ -1,5 +1,5 @@
 # pixel-chess (WIP)
-An online chess game created with Node.js and Websockets
+An online chess game created with Node.js and Websockets, powered by [chess.js](https://github.com/jhlywa/chess.js/).
 
 ## Initial mockups
 ### Splash
@@ -15,7 +15,7 @@ cd pixel-chess
 npm install
 npm start
 ```
-#### By default, it will be accessible on localhost:3000. To change the port, access package.json and modify 
+#### By default, it will be accessible on localhost:3000. To change the port, access package.json and modify: 
 ``` 
 "scripts": {"start": "node app.js portnumber"}, 
 ```
@@ -23,10 +23,10 @@ npm start
 ## Known Bugs
 ### Server
 - [x] When a player disconnects, the winning player is not correctly determined and the win message is not sent.
-- [ ] No websocket heartbeat implementation to abort games when player disconnects unexpectedly. 
+- [x] No websocket heartbeat implementation to abort games when player disconnects unexpectedly. 
 - [x] Aborted/completed games are not cleaned up from the currentGames array. 
 ### Client
-- [ ] When hovering over Cell A8, the chess table moves very slightly to the right.
+- [x] When hovering over Cell A8, the chess table moves very slightly to the right.
 Has to do with it being the 1st cell in the table, thus when hovering over it,
 its position becomes absolute, taking it out of the flow. (*Potential fix: adding additional invisible cells*)
 - [x] When in check, if trying to make a move, if that move is invalid, the red background behind the king still disappears.
