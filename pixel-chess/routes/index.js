@@ -4,7 +4,7 @@ var app = express();
 
 /* When pressing Play button, return this page */
 router.get('/play', function(req,res) {
-  res.sendFile("game.html", {root: "./public"})
+  res.sendFile("play.html", {root: "./public"})
 });
 
 /* GET splash screen home page. */

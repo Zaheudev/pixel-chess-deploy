@@ -79,7 +79,7 @@ wsServer.on("connection", function(ws) {
   }
 
   ws.on("message", function(message) {
-    console.log(message);
+    let clientMsg = JSON.parse(message);
     let currentGame = websockets.get(con.id);
 
     //only accept moves if gameState = Started
@@ -88,95 +88,98 @@ wsServer.on("connection", function(ws) {
     //TODO block possibleMove requests from client if not their turn 
     console.log(currentGame.getState());
     if(currentGame.getState() === "Started") {
-      if (message.includes(';')) {
-        let msg = message.split(';');
-        if ((currentGame.getWsWhite() === con && currentGame.getChess().turn() === 'w') ||
-        (currentGame.getWsBlack() === con && currentGame.getChess().turn() === 'b')) {
-          if (currentGame.getChess().move({from:msg[0],to:msg[1]}) != null){
-            console.log(currentGame.getChess().ascii());
-            con.send(JSON.stringify(new Message("validity","valid")));
-            if (con === currentGame.getWsWhite()) {
-              currentGame.getWsBlack().send(JSON.stringify(new Message("opponentMove", {from:msg[0],to:msg[1]})));
-            }else {
-              currentGame.getWsWhite().send(JSON.stringify(new Message("opponentMove",{from:msg[0], to:msg[1]})));
-            }
-            //send turn message along with all possible moves (inefficient, only from field needs to be sent)
-            if (con === currentGame.getWsWhite() && currentGame.getChess().turn() === 'b') {
-              let pieces = [];
-              for(let move of currentGame.getChess().moves({verbose:true})) {
-                pieces.push(move.from);
-              }
-              currentGame.getWsBlack().send(JSON.stringify(new Message("turn", pieces)));
-            }else if (con === currentGame.getWsBlack() && currentGame.getChess().turn() === 'w') {
-              let pieces = [];
-              for(let move of currentGame.getChess().moves({verbose:true})) {
-                pieces.push(move.from);
-              }
-              currentGame.getWsWhite().send(JSON.stringify(new Message("turn", pieces)));
-            }
-
-            //check if in check, send message
-            if (currentGame.getChess().in_check()) {
+      switch (clientMsg.type) {
+        case "move":
+          let msg = clientMsg.data.split(';');
+          if ((currentGame.getWsWhite() === con && currentGame.getChess().turn() === 'w') ||
+          (currentGame.getWsBlack() === con && currentGame.getChess().turn() === 'b')) {
+            if (currentGame.getChess().move({from:msg[0],to:msg[1]}) != null){
+              console.log(currentGame.getChess().ascii());
+              con.send(JSON.stringify(new Message("validity","valid")));
               if (con === currentGame.getWsWhite()) {
-                currentGame.getWsBlack().send(JSON.stringify(new Message("check")));
+                currentGame.getWsBlack().send(JSON.stringify(new Message("opponentMove", {from:msg[0],to:msg[1]})));
               }else {
-                currentGame.getWsWhite().send(JSON.stringify(new Message("check")));
+                currentGame.getWsWhite().send(JSON.stringify(new Message("opponentMove",{from:msg[0], to:msg[1]})));
               }
-            }
-            //check for GAME OVER after move
-            if (currentGame.getChess().game_over()) {
-              status.incCompleted();
-              if (currentGame.getChess().in_checkmate()) {
+              //send turn message along with all possible moves (inefficient, only from field needs to be sent)
+              if (con === currentGame.getWsWhite() && currentGame.getChess().turn() === 'b') {
+                let pieces = [];
+                for(let move of currentGame.getChess().moves({verbose:true})) {
+                  pieces.push(move.from);
+                }
+                currentGame.getWsBlack().send(JSON.stringify(new Message("turn", pieces)));
+              }else if (con === currentGame.getWsBlack() && currentGame.getChess().turn() === 'w') {
+                let pieces = [];
+                for(let move of currentGame.getChess().moves({verbose:true})) {
+                  pieces.push(move.from);
+                }
+                currentGame.getWsWhite().send(JSON.stringify(new Message("turn", pieces)));
+              }
+
+              //check if in check, send message
+              if (currentGame.getChess().in_check()) {
                 if (con === currentGame.getWsWhite()) {
-                  currentGame.setState("White");
-                  currentGame.getWsWhite().send(JSON.stringify(new Message("You Won")));
-                  currentGame.getWsBlack().send(JSON.stringify(new Message("You Lost")));
-                  currentGame.getWsWhite().close();
-                  currentGame.getWsBlack().close();
-                  currentGames.delete(currentGame.getId());
+                  currentGame.getWsBlack().send(JSON.stringify(new Message("check")));
                 }else {
-                  currentGame.setState("Black");
-                  currentGame.getWsBlack().send(JSON.stringify(new Message("You Won")));
-                  currentGame.getWsWhite().send(JSON.stringify(new Message("You Lost")));
-                  currentGame.getWsWhite().close();
-                  currentGame.getWsBlack().close();
-                  currentGames.delete(currentGame.getId());
+                  currentGame.getWsWhite().send(JSON.stringify(new Message("check")));
                 }
               }
+              //check for GAME OVER after move
+              if (currentGame.getChess().game_over()) {
+                status.incCompleted();
+                if (currentGame.getChess().in_checkmate()) {
+                  if (con === currentGame.getWsWhite()) {
+                    currentGame.setState("White");
+                    currentGame.getWsWhite().send(JSON.stringify(new Message("You Won")));
+                    currentGame.getWsBlack().send(JSON.stringify(new Message("You Lost")));
+                    currentGame.getWsWhite().close();
+                    currentGame.getWsBlack().close();
+                    currentGames.delete(currentGame.getId());
+                  }else {
+                    currentGame.setState("Black");
+                    currentGame.getWsBlack().send(JSON.stringify(new Message("You Won")));
+                    currentGame.getWsWhite().send(JSON.stringify(new Message("You Lost")));
+                    currentGame.getWsWhite().close();
+                    currentGame.getWsBlack().close();
+                    currentGames.delete(currentGame.getId());
+                  }
+                }
 
-            //check for DRAW after move
-            else if (currentGame.getChess().in_draw() || currentGame.getChess().in_stalemate() || 
-            currentGame.getChess().in_threefold_repetition() || currentGame.getChess().insufficient_material()){
-              currentGame.setState("Draw");
-              status.incCompleted();
-              currentGames.delete(currentGame.getId());
-              currentGame.getWsWhite().send(JSON.stringify(new Message("draw")));
-              currentGame.getWsBlack().send(JSON.stringify(new Message("draw")));
-              currentGame.getWsWhite().close();
-              currentGame.getWsBlack().close();
+              //check for DRAW after move
+              else if (currentGame.getChess().in_draw() || currentGame.getChess().in_stalemate() || 
+              currentGame.getChess().in_threefold_repetition() || currentGame.getChess().insufficient_material()){
+                currentGame.setState("Draw");
+                status.incCompleted();
+                currentGames.delete(currentGame.getId());
+                currentGame.getWsWhite().send(JSON.stringify(new Message("draw")));
+                currentGame.getWsBlack().send(JSON.stringify(new Message("draw")));
+                currentGame.getWsWhite().close();
+                currentGame.getWsBlack().close();
+              }
             }
-          }
-        }else {
-            //Send client invalid move message!
-            console.log("Invalid move!");
+            }else {
+              //Send client invalid move message!
+              console.log("Invalid move!");
+              con.send(JSON.stringify(new Message("validity","invalid")));
+            }
+          }else {
+            //Send client who tried to made a move for the opponent an invalid message
+            console.log("Player tried to move for the other. CHEATER!");
             con.send(JSON.stringify(new Message("validity","invalid")));
           }
-        }else {
-          //Send client who tried to made a move for the opponent an invalid message
-          console.log("Player tried to move for the other. CHEATER!");
-          con.send(JSON.stringify(new Message("validity","invalid")));
-        }
-    }else {
+          break;
+    case "queryPossibleMoves":
       console.log("Sending moves!");
       if (con === currentGame.getWsWhite() && 'w' === currentGame.getChess().turn() ) {
-        con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: message, verbose: true})))));
+        con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: clientMsg.data, verbose: true})))));
       }
       else if (con === currentGame.getWsBlack() && 'b' === currentGame.getChess().turn()) {
-        con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: message, verbose: true})))));
+        con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: clientMsg.data, verbose: true})))));
       }
+      break;
     }
   }
-  })
+})
 
 ws.on("close", function(code) {
     console.log(con.id + " has closed the connection" );

@@ -152,12 +152,14 @@
     border-radius:13px;
     width: 122px;
     height: 40px;
+    cursor: pointer;
 }
 
 #quitBtn{
     position: absolute;
     top: 80%;
     right: 45%;
+    cursor: pointer;
 }
 
 #quitBtn input{
@@ -169,6 +171,7 @@
     border-radius:13px;
     width: 135px;
     height: 50px;
+    cursor: pointer;
 }
 
 #center div{
@@ -196,6 +199,7 @@
     width: 100px;
     height: 40px;
     font-size: 25px;
+    cursor: pointer;
 }
 
 #center h1{
