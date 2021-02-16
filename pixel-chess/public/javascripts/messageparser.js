@@ -86,10 +86,10 @@ function resolveMsg(msg) {
         console.log("You're in check!");
         let king;
         if (playerType === "White") {
-            king = document.getElementById("white_king")
+            king = document.getElementById("white_king");
         }
         else if (playerType === "Black") {
-            king = document.getElementById("black_king")
+            king = document.getElementById("black_king");
         }
         king.style.backgroundColor = "red";
         break;

@@ -50,8 +50,23 @@ board.addEventListener('click', (e)=>{
                 
                 if (cell1 != null && cell2 != null) {
                     console.log(cell1+";"+cell2);
+                    for (move of possibleMoves) {
+                        console.log(move);
+                        if (cell1 === move.from && cell2 === move.to) {
+                            //this is dumb and inconsistent with how we send normal moves but I can't be asked
+                            if (move.flags.includes('p')) {
+                                //TODO block all cells to prevent weird stuff happening
+                                promote();
+                                //TODO unblock cells
+                                
+                            }else {
+                                client.send(JSON.stringify(new Message("move",move)));
+                            }
+                            break;
+                        }
+                    }
                     //client.send(cell1+";"+cell2);
-                    client.send(JSON.stringify(new Message("move",cell1+";"+cell2)));
+                    //client.send(JSON.stringify(new Message("move",cell1+";"+cell2)));
                     console.log("SENT!");
                     for (cellID of possible){
                         document.getElementById(cellID).style.backgroundColor = "";
@@ -91,8 +106,21 @@ board.addEventListener('click', (e)=>{
                 console.log("Cell2 = "+ cell2);
                 if (cell1 != null && cell2 != null) {
                     console.log(cell1+";"+cell2);
-                    //client.send(cell1+";"+cell2);
-                    client.send(JSON.stringify(new Message("move",cell1+";"+cell2)));
+                    for (move of possibleMoves) {
+                        console.log(move);
+                        if (cell1 === move.from && cell2 === move.to) {
+                            //this is dumb and inconsistent with how we send normal moves but I can't be asked
+                            if (move.flags.includes('p')) {
+                                //TODO block all cells to prevent weird stuff happening
+                                promote();
+                                //TODO unblock cells
+                            }else {
+                                client.send(JSON.stringify(new Message("move",move)));
+                            }
+                            break;
+                        }
+                    }
+                    //client.send(JSON.stringify(new Message("move",cell1+";"+cell2)));
                     console.log("SENT!");
                     for (cellID of possible){
                         document.getElementById(cellID).style.backgroundColor = "";
@@ -143,5 +171,46 @@ function flipBoard() {
         console.log(orig.innerHTML+" " + replace.innerHTML);
         replace.innerHTML = orig.innerHTML;
         orig.innerHTML = "";
+    }
+}
+
+function promote() {
+    let panel = document.querySelector("#center #promotionPanel");
+    panel.style.display = "block";
+    document.querySelector("#promoteQueen").onclick = function() {
+        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'q'})));
+        if (playerType === "White") {
+            document.querySelector("#"+move.from).innerHTML = "<img src='images/chess/white_queen.png' draggable='false' id='white_queen'>";
+        }else {
+            document.querySelector("#"+move.from).innerHTML = '<img src="images/chess/black_queen.png" draggable="false" id="black_queen" style="transform: rotateX(180deg) rotateY(180deg)">';
+        }
+        panel.style.display = "none";
+    }
+    document.querySelector("#promoteRook").onclick = function() {
+        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'r'})));
+        if (playerType === "White") {
+            document.querySelector("#"+move.from).innerHTML = "<img src='images/chess/white_rook.png' draggable='false' id='white_rook'>";
+        }else {
+            document.querySelector("#"+move.from).innerHTML = '<img src="images/chess/black_rook.png" draggable="false" id="black_rook" style="transform: rotateX(180deg) rotateY(180deg)">';
+        }
+        panel.style.display = "none";
+    }
+    document.querySelector("#promoteBishop").onclick = function() {
+        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'b'})));
+        if (playerType === "White") {
+            document.querySelector("#"+move.from).innerHTML = "<img src='images/chess/white_bishop.png' draggable='false' id='white_bishop'>";
+        }else {
+            document.querySelector("#"+move.from).innerHTML = '<img src="images/chess/black_bishop.png" draggable="false" id="black_bishop" style="transform: rotateX(180deg) rotateY(180deg)">';
+        }
+        panel.style.display = "none";
+    }
+    document.querySelector("#promoteKnight").onclick = function() {
+        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'n'})));
+        if (playerType === "White") {
+            document.querySelector("#"+move.from).innerHTML = "<img src='images/chess/white_knight.png' draggable='false' id='white_knight'>";
+        }else {
+            document.querySelector("#"+move.from).innerHTML = '<img src="images/chess/black_knight.png" draggable="false" id="black_knight" style="transform: rotateX(180deg) rotateY(180deg)">';
+        }
+        panel.style.display = "none";
     }
 }
