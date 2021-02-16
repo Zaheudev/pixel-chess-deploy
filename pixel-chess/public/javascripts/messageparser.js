@@ -11,14 +11,16 @@ var img = null;
 function resolveMsg(msg) {
     switch(msg.type) {
     case "possibleMoves":
+        console.log("Possible moves:\n");
         console.log(msg.data);
         possibleMoves = msg.data;
         for (let move of msg.data) {
             let e = document.getElementById(move.to);
-            if (move.flags === 'c' || move.flags === 'e') {
+            if (move.flags.includes('c') || move.flags.includes('e')) {
                 e.style.backgroundColor = "red";
                 possible.push(e.id);
-            }else {
+            }
+            else {
                 e.style.backgroundColor = "green";              
                 possible.push(e.id);
             }

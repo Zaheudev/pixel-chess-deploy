@@ -47,6 +47,7 @@ board.addEventListener('click', (e)=>{
             if (possible.includes(e.target.id)) {
                 cell2 = e.target.id;
                 console.log("Cell2 = "+ cell2);
+                
                 if (cell1 != null && cell2 != null) {
                     console.log(cell1+";"+cell2);
                     //client.send(cell1+";"+cell2);

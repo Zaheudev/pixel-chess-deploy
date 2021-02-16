@@ -189,6 +189,19 @@
     text-align: center;
 }
 
+#center #promotionPanel {
+    height:auto;
+}
+#center #promotionPanel button {
+    font-family: PixelEmulator;
+    border-radius:13px;
+    margin-bottom: 1em;
+    width: auto;
+    height: 40px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
 #timer {
     font-family: PixelEmulator;
 }

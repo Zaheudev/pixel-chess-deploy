@@ -83,9 +83,6 @@ wsServer.on("connection", function(ws) {
     let currentGame = websockets.get(con.id);
 
     //only accept moves if gameState = Started
-
-    //TODO parse JSON messages from client (optional)
-    //TODO block possibleMove requests from client if not their turn 
     console.log(currentGame.getState());
     if(currentGame.getState() === "Started") {
       switch (clientMsg.type) {
