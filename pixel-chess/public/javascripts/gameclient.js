@@ -74,7 +74,6 @@ board.addEventListener('click', (e)=>{
             }
         }
         }
-    //TODO make it work when pressing on image as well!!!
     }else if(e.target.nodeName === 'IMG'){
         console.log(imgCell.parentElement.id);
         if (!pieceSelected) {

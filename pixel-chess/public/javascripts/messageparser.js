@@ -135,14 +135,13 @@ function resolveMsg(msg) {
             playerType = "White";
             turnText.firstElementChild.innerHTML = "IT'S YOUR TURN"
         }
-        //TODO, flip board depending on color
         break;
     case "opponentLeft":
         let panel1 = document.querySelector("#opponentLeftPanel");
         panel1.style.display = "block";
         console.log("opponentLeft");
         break;
-    case "You Win":
+    case "You Won":
         console.log("You WON!");
         let panel2 = document.querySelector("#youWonPanel");
         panel2.style.display = "block";

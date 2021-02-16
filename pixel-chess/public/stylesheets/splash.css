@@ -76,8 +76,7 @@ h1 {
     user-select: none;
 
     text-shadow: none;
-    animation: TextAnim 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) both, glow 7s infinite;
-
+    animation: TextAnim 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
 }
 
 .right-horse{
