@@ -30,9 +30,12 @@ function Message (type, data) {
     this.data = data;
 }
 
+// if(isPromoting){
+//     document.querySelector(".chees-board")
+// }
+
 board.addEventListener('click', (e)=>{
     let imgCell = document.getElementById(e.target.id);
-    
     if (e.target.nodeName === 'TD') {
         if (!pieceSelected) {
             if (possiblePieces.includes(e.target.id)){
@@ -57,6 +60,7 @@ board.addEventListener('click', (e)=>{
                             if (move.flags.includes('p')) {
                                 //TODO block all cells to prevent weird stuff happening
                                 promote();
+                                promotion = true;
                                 //TODO unblock cells
                                 
                             }else {
@@ -86,7 +90,7 @@ board.addEventListener('click', (e)=>{
             cell2 = null;
             pieceSelected = false;
             for (cellID of possible){
-                        document.getElementById(cellID).style.backgroundColor = "";
+                document.getElementById(cellID).style.backgroundColor = "";
             }
         }
         }
@@ -176,41 +180,47 @@ function flipBoard() {
 
 function promote() {
     let panel = document.querySelector("#center #promotionPanel");
+    // let playerType;
     panel.style.display = "block";
+    board.style.pointerEvents = "none";
     document.querySelector("#promoteQueen").onclick = function() {
-        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'q'})));
+        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'q', playerType: playerType})));
         if (playerType === "White") {
-            document.querySelector("#"+move.from).innerHTML = "<img src='images/chess/white_queen.png' draggable='false' id='white_queen'>";
+            document.querySelector("#"+move.from).firstElementChild.src = 'images/chess/white_queen.png';
         }else {
-            document.querySelector("#"+move.from).innerHTML = '<img src="images/chess/black_queen.png" draggable="false" id="black_queen" style="transform: rotateX(180deg) rotateY(180deg)">';
+            document.querySelector("#"+move.from).firstElementChild.src = "images/chess/black_queen.png";
         }
         panel.style.display = "none";
+        board.style.pointerEvents = "all";
     }
     document.querySelector("#promoteRook").onclick = function() {
-        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'r'})));
+        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'r', playerType: playerType})));
         if (playerType === "White") {
-            document.querySelector("#"+move.from).innerHTML = "<img src='images/chess/white_rook.png' draggable='false' id='white_rook'>";
+            document.querySelector("#"+move.from).firstElementChild.src ='images/chess/white_rook.png';
         }else {
-            document.querySelector("#"+move.from).innerHTML = '<img src="images/chess/black_rook.png" draggable="false" id="black_rook" style="transform: rotateX(180deg) rotateY(180deg)">';
+            document.querySelector("#"+move.from).firstElementChild.src ="images/chess/black_rook.png";
         }
         panel.style.display = "none";
+        board.style.pointerEvents = "all";
     }
     document.querySelector("#promoteBishop").onclick = function() {
-        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'b'})));
+        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'b', playerType: playerType})));
         if (playerType === "White") {
-            document.querySelector("#"+move.from).innerHTML = "<img src='images/chess/white_bishop.png' draggable='false' id='white_bishop'>";
+            document.querySelector("#"+move.from).firstElementChild.src = 'images/chess/white_bishop.png';
         }else {
-            document.querySelector("#"+move.from).innerHTML = '<img src="images/chess/black_bishop.png" draggable="false" id="black_bishop" style="transform: rotateX(180deg) rotateY(180deg)">';
+            document.querySelector("#"+move.from).firstElementChild.src = "images/chess/black_bishop.png";
         }
         panel.style.display = "none";
+        board.style.pointerEvents = "all";
     }
     document.querySelector("#promoteKnight").onclick = function() {
-        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'n'})));
+        client.send(JSON.stringify(new Message("move", {from: move.from, to: move.to, promotion: 'n', playerType: playerType})));
         if (playerType === "White") {
-            document.querySelector("#"+move.from).innerHTML = "<img src='images/chess/white_knight.png' draggable='false' id='white_knight'>";
+            document.querySelector("#"+move.from).firstElementChild.src = 'images/chess/white_knight.png';
         }else {
-            document.querySelector("#"+move.from).innerHTML = '<img src="images/chess/black_knight.png" draggable="false" id="black_knight" style="transform: rotateX(180deg) rotateY(180deg)">';
+            document.querySelector("#"+move.from).firstElementChild.src = "images/chess/black_knight.png";
         }
         panel.style.display = "none";
+        board.style.pointerEvents = "all";
     }
 }

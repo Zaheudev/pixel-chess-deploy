@@ -8,6 +8,8 @@ client.onmessage = function (event) {
 
 var possible = [];
 var img = null;
+var currentPiece = null;
+
 function resolveMsg(msg) {
     switch(msg.type) {
     case "possibleMoves":
@@ -21,7 +23,7 @@ function resolveMsg(msg) {
                 possible.push(e.id);
             }
             else {
-                e.style.backgroundColor = "green";              
+                e.style.backgroundColor = "green";
                 possible.push(e.id);
             }
         }
@@ -32,14 +34,17 @@ function resolveMsg(msg) {
             let from = document.getElementById(cell1);
             let to = document.getElementById(cell2);
             if(to.hasChildNodes()){
-                piecesGainedCounter++;
-                if(to.firstElementChild.nodeName === "IMG"){
-                    pieceCaptured = to.firstElementChild;
-                    let imgPlace = document.querySelector("#G"+piecesGainedCounter);
-                    if (playerType === "Black") {
-                        imgPlace.style.transform = "rotateX(180deg) rotateY(180deg)"
+                let spliter = to.firstElementChild.id.split("_");
+                if(playerType.toUpperCase() != spliter[0].toUpperCase()){
+                    piecesGainedCounter++;
+                    if(to.firstElementChild.nodeName === "IMG"){
+                        pieceCaptured = to.firstElementChild;
+                        let imgPlace = document.querySelector("#G"+piecesGainedCounter);
+                        if (playerType === "Black") {
+                            imgPlace.style.transform = "rotateX(180deg) rotateY(180deg)"
+                        }
+                        imgPlace.append(pieceCaptured);
                     }
-                    imgPlace.append(pieceCaptured);
                 }
             }
             to.innerHTML = from.innerHTML;
@@ -62,15 +67,18 @@ function resolveMsg(msg) {
         let from = document.getElementById(msg.data.from);
         let to = document.getElementById(msg.data.to);
         if(to.hasChildNodes()){
-            piecesLostCounter++;
-            if(to.firstElementChild.nodeName === "IMG"){
-                pieceCaptured = to.firstElementChild;
-                // pieceCaptured.style.transform = "rotateX(180deg) rotateY(180deg)";
-                let imgPlace = document.querySelector("#l"+piecesLostCounter);
-                if (playerType === "Black") {
+            let spliter = to.firstElementChild.id.split("_");
+            if(playerType.toUpperCase() === spliter[0].toUpperCase()){
+                piecesLostCounter++;
+                if(to.firstElementChild.nodeName === "IMG"){
+                    pieceCaptured = to.firstElementChild;
+                    // pieceCaptured.style.transform = "rotateX(180deg) rotateY(180deg)";
+                    let imgPlace = document.querySelector("#l"+piecesLostCounter);
+                    if (playerType === "Black") {
                         imgPlace.style.transform = "rotateX(180deg) rotateY(180deg)"
                     }
-                imgPlace.append(pieceCaptured);
+                    imgPlace.append(pieceCaptured);
+                }
             }
         }
         to.innerHTML = from.innerHTML;
@@ -130,12 +138,51 @@ function resolveMsg(msg) {
         if(msg.data === "Black") {
             playerType = "Black";
             turnText.firstElementChild.innerHTML = "OPPONENT'S TURN"
-            //swapRow("row8", "row1");
             flipBoard();
         }
         else if(msg.data === "White") {
             playerType = "White";
             turnText.firstElementChild.innerHTML = "IT'S YOUR TURN"
+        }
+        break;
+    case "QUEEN":
+        currentPiece = document.querySelector("#"+msg.data).firstElementChild;
+        if(playerType === "Black"){
+            currentPiece.src = 'images/chess/white_queen.png';
+            currentPieceCell = null;
+        }else{
+            currentPiece.src = "images/chess/black_queen.png";
+            currentPieceCell = null;
+        }
+        break;
+    case "ROOK":
+        currentPiece = document.querySelector("#"+msg.data).firstElementChild;
+        if(playerType === "Black"){
+            currentPiece.src = 'images/chess/white_rook.png';
+            currentPiece = null;
+        }else{
+            currentPiece.src = "images/chess/black_rook.png";
+            currentPiece = null;
+        }
+        break;
+    case "BISHOP":
+        currentPiece = document.querySelector("#"+msg.data).firstElementChild;
+        if(playerType === "Black"){
+            currentPiece.src = 'images/chess/white_bishop.png';
+            currentPiece = null;
+        }else{
+            currentPiece.src = "images/chess/black_bishop.png";
+            currentPiece = null;
+        }
+        break;
+    case "KNIGHT":
+        currentPiece = document.querySelector("#"+msg.data).firstElementChild;
+        if(playerType === "Black"){
+            currentPiece.src = 'images/chess/white_knight.png';
+            currentPiece = null;
+        }else{
+            currentPiece.src = "images/chess/black_knight.png"
+            currentPiece = null;
         }
         break;
     case "opponentLeft":

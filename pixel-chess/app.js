@@ -97,6 +97,31 @@ wsServer.on("connection", function(ws) {
                 console.log(currentGame.getChess().ascii());
                 con.send(JSON.stringify(new Message("validity","valid")));
                 console.log(msg);
+                if(msg.promotion === 'q'){
+                  if(msg.playerType === "White"){
+                    currentGame.getWsBlack().send(JSON.stringify(new Message("QUEEN", msg.from)));
+                  }else{
+                    currentGame.getWsWhite().send(JSON.stringify(new Message("QUEEN", msg.from)));
+                  }
+                }else if(msg.promotion === 'r'){
+                  if(msg.playerType === "White"){
+                    currentGame.getWsBlack().send(JSON.stringify(new Message("ROOK", msg.from)));
+                  }else{
+                    currentGame.getWsWhite().send(JSON.stringify(new Message("ROOK", msg.from)));
+                  }
+                }else if(msg.promotion === "b"){
+                  if(msg.playerType === "White"){
+                    currentGame.getWsBlack().send(JSON.stringify(new Message("BISHOP", msg.from)));
+                  }else{
+                    currentGame.getWsWhite().send(JSON.stringify(new Message("BISHOP", msg.from)));
+                  }
+                }else if(msg.promotion === "n"){
+                  if(msg.playerType === "White"){
+                    currentGame.getWsBlack().send(JSON.stringify(new Message("KNIGHT", msg.from)));
+                  }else{
+                    currentGame.getWsWhite().send(JSON.stringify(new Message("KNIGHT", msg.from)));
+                  }
+                }
                 if (con === currentGame.getWsWhite()) {
                   currentGame.getWsBlack().send(JSON.stringify(new Message("opponentMove", msg)));
                 }else {
@@ -177,7 +202,7 @@ wsServer.on("connection", function(ws) {
       else if (con === currentGame.getWsBlack() && 'b' === currentGame.getChess().turn()) {
         con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: clientMsg.data, verbose: true})))));
       }
-      break;
+      break;  
     }
   }
 })
@@ -214,6 +239,7 @@ ws.on("close", function(code) {
     }
   })
 })
+
 /*
 app.get('/', function(req,res) {
   const title = "Pixel Chess";
