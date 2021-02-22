@@ -58,14 +58,11 @@ board.addEventListener('click', (e)=>{
                         if (cell1 === move.from && cell2 === move.to) {
                             //this is dumb and inconsistent with how we send normal moves but I can't be asked
                             if (move.flags.includes('p')) {
-                                //TODO block all cells to prevent weird stuff happening
                                 promote();
-                                promotion = true;
-                                //TODO unblock cells
-                                
                             }else {
                                 client.send(JSON.stringify(new Message("move",move)));
                             }
+                            castling();
                             break;
                         }
                     }
@@ -115,12 +112,11 @@ board.addEventListener('click', (e)=>{
                         if (cell1 === move.from && cell2 === move.to) {
                             //this is dumb and inconsistent with how we send normal moves but I can't be asked
                             if (move.flags.includes('p')) {
-                                //TODO block all cells to prevent weird stuff happening
                                 promote();
-                                //TODO unblock cells
                             }else {
                                 client.send(JSON.stringify(new Message("move",move)));
                             }
+                            castling();
                             break;
                         }
                     }
@@ -175,6 +171,43 @@ function flipBoard() {
         console.log(orig.innerHTML+" " + replace.innerHTML);
         replace.innerHTML = orig.innerHTML;
         orig.innerHTML = "";
+    }
+}
+
+function castling(){
+    if(move.flags.includes('k')){
+        if(playerType === "White"){
+            let oldRookCell = document.querySelector("#white_rook2").parentElement;
+            let rookImg = oldRookCell.firstElementChild;
+            let targetCell = document.querySelector("#"+possibleMoves[0].to);
+            oldRookCell.removeChild(oldRookCell.firstElementChild);
+            targetCell.appendChild(rookImg);
+            client.send(JSON.stringify(new Message("move", {rookpos: possibleMoves[0].to, side: 'k', playerType: playerType})));
+    }else{
+            oldRookCell = document.querySelector("#black_rook2").parentElement;
+            rookImg = oldRookCell.firstElementChild;
+            targetCell = document.querySelector("#"+possibleMoves[0].to);
+            oldRookCell.removeChild(oldRookCell.firstElementChild);
+            targetCell.appendChild(rookImg);
+            client.send(JSON.stringify(new Message("move", {rookpos: possibleMoves[0].to, side: 'k', playerType: playerType})));
+        }
+    }else if(move.flags.includes('q')){
+        if(playerType === "White"){
+            oldRookCell = document.querySelector("#white_rook1").parentElement;
+            rookImg = oldRookCell.firstElementChild;
+            targetCell = document.querySelector("#"+possibleMoves[0].to);
+            oldRookCell.removeChild(oldRookCell.firstElementChild);
+            targetCell.appendChild(rookImg);
+            client.send(JSON.stringify(new Message("move", {rookpos: possibleMoves[0].to, side: 'q', playerType: playerType})));
+
+        }else{
+            oldRookCell = document.querySelector("#black_rook1").parentElement;
+            rookImg = oldRookCell.firstElementChild;
+            targetCell = document.querySelector("#"+possibleMoves[0].to);
+            oldRookCell.removeChild(oldRookCell.firstElementChild);
+            targetCell.appendChild(rookImg);
+            client.send(JSON.stringify(new Message("move", {rookpos: possibleMoves[0].to, side: 'q', playerType: playerType})));
+        }
     }
 }
 

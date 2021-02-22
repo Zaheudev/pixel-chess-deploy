@@ -20,21 +20,6 @@ npm start
 "scripts": {"start": "node app.js portnumber"}, 
 ```
 
-## Known Bugs
-### Server
-- [x] When a player disconnects, the winning player is not correctly determined and the win message is not sent.
-- [x] No websocket heartbeat implementation to abort games when player disconnects unexpectedly. 
-- [x] Aborted/completed games are not cleaned up from the currentGames array. 
-### Client
-- [x] When hovering over Cell A8, the chess table moves very slightly to the right.
-Has to do with it being the 1st cell in the table, thus when hovering over it,
-its position becomes absolute, taking it out of the flow. (*Potential fix: adding additional invisible cells*)
-- [x] When in check, if trying to make a move, if that move is invalid, the red background behind the king still disappears.
-(*Fix: Receive possible moves from server and disable all other moves!*)
-- [ ] When castling, the position of the rook does not update on the screen.
-- [ ] When a pawn is one move away from promotion, the promotion move is seen as invalid as no promotion field is set. 
-(*Fix: Overhaul client-server communication sending move object to the server which can therefore include the promotion field.*)
-
 ## Credits
 * Vel1khan
 * Zaheu

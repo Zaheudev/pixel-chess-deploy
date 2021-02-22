@@ -34,17 +34,14 @@ function resolveMsg(msg) {
             let from = document.getElementById(cell1);
             let to = document.getElementById(cell2);
             if(to.hasChildNodes()){
-                let spliter = to.firstElementChild.id.split("_");
-                if(playerType.toUpperCase() != spliter[0].toUpperCase()){
-                    piecesGainedCounter++;
-                    if(to.firstElementChild.nodeName === "IMG"){
-                        pieceCaptured = to.firstElementChild;
-                        let imgPlace = document.querySelector("#G"+piecesGainedCounter);
-                        if (playerType === "Black") {
-                            imgPlace.style.transform = "rotateX(180deg) rotateY(180deg)"
-                        }
-                        imgPlace.append(pieceCaptured);
+                piecesGainedCounter++;
+                if(to.firstElementChild.nodeName === "IMG"){
+                    pieceCaptured = to.firstElementChild;
+                    let imgPlace = document.querySelector("#G"+piecesGainedCounter);
+                    if (playerType === "Black") {
+                        imgPlace.style.transform = "rotateX(180deg) rotateY(180deg)"
                     }
+                    imgPlace.append(pieceCaptured);
                 }
             }
             to.innerHTML = from.innerHTML;
@@ -67,18 +64,15 @@ function resolveMsg(msg) {
         let from = document.getElementById(msg.data.from);
         let to = document.getElementById(msg.data.to);
         if(to.hasChildNodes()){
-            let spliter = to.firstElementChild.id.split("_");
-            if(playerType.toUpperCase() === spliter[0].toUpperCase()){
-                piecesLostCounter++;
-                if(to.firstElementChild.nodeName === "IMG"){
-                    pieceCaptured = to.firstElementChild;
-                    // pieceCaptured.style.transform = "rotateX(180deg) rotateY(180deg)";
-                    let imgPlace = document.querySelector("#l"+piecesLostCounter);
-                    if (playerType === "Black") {
-                        imgPlace.style.transform = "rotateX(180deg) rotateY(180deg)"
-                    }
-                    imgPlace.append(pieceCaptured);
+            piecesLostCounter++;
+            if(to.firstElementChild.nodeName === "IMG"){
+                pieceCaptured = to.firstElementChild;
+                // pieceCaptured.style.transform = "rotateX(180deg) rotateY(180deg)";
+                let imgPlace = document.querySelector("#l"+piecesLostCounter);
+                if (playerType === "Black") {
+                    imgPlace.style.transform = "rotateX(180deg) rotateY(180deg)"
                 }
+                imgPlace.append(pieceCaptured);
             }
         }
         to.innerHTML = from.innerHTML;
@@ -143,6 +137,41 @@ function resolveMsg(msg) {
         else if(msg.data === "White") {
             playerType = "White";
             turnText.firstElementChild.innerHTML = "IT'S YOUR TURN"
+        }
+        break;
+    case "Castling":
+        let rookImg;
+        let targetCell;
+        let oldRookCell;
+        
+        if(msg.data.side === 'k'){
+            if(playerType === "White"){
+                rookImg = document.querySelector("#black_rook2");
+                targetCell = document.querySelector("#"+msg.data.rookpos);
+                oldRookCell = rookImg.parentElement;
+                oldRookCell.removeChild(oldRookCell.firstElementChild);
+                targetCell.appendChild(rookImg);
+            }else{
+                rookImg = document.querySelector("#white_rook2");
+                targetCell = document.querySelector("#"+msg.data.rookpos);
+                oldRookCell = rookImg.parentElement;
+                oldRookCell.removeChild(oldRookCell.firstElementChild);
+                targetCell.appendChild(rookImg);
+            }
+        }else if(msg.data.side === 'q'){
+            if(playerType === "White"){
+                rookImg = document.querySelector("#black_rook1");
+                targetCell = document.querySelector("#"+msg.data.rookpos);
+                oldRookCell = rookImg.parentElement;
+                oldRookCell.removeChild(oldRookCell.firstElementChild);
+                targetCell.appendChild(rookImg);
+            }else{
+                rookImg = document.querySelector("#white_rook1");
+                targetCell = document.querySelector("#"+msg.data.rookpos);
+                oldRookCell = rookImg.parentElement;
+                oldRookCell.removeChild(oldRookCell.firstElementChild);
+                targetCell.appendChild(rookImg);
+            }
         }
         break;
     case "QUEEN":

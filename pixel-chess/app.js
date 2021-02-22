@@ -90,6 +90,15 @@ wsServer.on("connection", function(ws) {
           //let msg = clientMsg.data.split(';');
           let msg = clientMsg.data;
           console.log(msg);
+          if(msg.side === 'k' || msg.side === 'q'){
+            if(msg.playerType === "White"){
+              currentGame.getWsBlack().send(JSON.stringify(new Message("Castling", msg)));
+            }else{
+            if(msg.playerType === "Black"){
+              currentGame.getWsWhite().send(JSON.stringify(new Message("Castling", msg)));
+            }
+          }
+        }
           if ((currentGame.getWsWhite() === con && currentGame.getChess().turn() === 'w') ||
           (currentGame.getWsBlack() === con && currentGame.getChess().turn() === 'b')) {
             //if (currentGame.getChess().move({from:msg[0],to:msg[1]}) != null){
@@ -97,6 +106,7 @@ wsServer.on("connection", function(ws) {
                 console.log(currentGame.getChess().ascii());
                 con.send(JSON.stringify(new Message("validity","valid")));
                 console.log(msg);
+                
                 if(msg.promotion === 'q'){
                   if(msg.playerType === "White"){
                     currentGame.getWsBlack().send(JSON.stringify(new Message("QUEEN", msg.from)));
@@ -196,13 +206,11 @@ wsServer.on("connection", function(ws) {
           break;
     case "queryPossibleMoves":
       console.log("Sending moves!");
-      if (con === currentGame.getWsWhite() && 'w' === currentGame.getChess().turn() ) {
-        con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: clientMsg.data, verbose: true})))));
-      }
-      else if (con === currentGame.getWsBlack() && 'b' === currentGame.getChess().turn()) {
-        con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: clientMsg.data, verbose: true})))));
-      }
-      break;  
+      con.send(JSON.stringify((new Message("possibleMoves", currentGame.getChess().moves({ 
+        square: clientMsg.data, 
+        verbose: true
+      })))));
+      break;
     }
   }
 })
