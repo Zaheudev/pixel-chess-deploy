@@ -196,12 +196,10 @@ wsServer.on("connection", function(ws) {
           break;
     case "queryPossibleMoves":
       console.log("Sending moves!");
-      if (con === currentGame.getWsWhite() && 'w' === currentGame.getChess().turn() ) {
-        con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: clientMsg.data, verbose: true})))));
-      }
-      else if (con === currentGame.getWsBlack() && 'b' === currentGame.getChess().turn()) {
-        con.send(JSON.stringify((new Message("possibleMoves",currentGame.getChess().moves({ square: clientMsg.data, verbose: true})))));
-      }
+      con.send(JSON.stringify((new Message("possibleMoves", currentGame.getChess().moves({ 
+        square: clientMsg.data, 
+        verbose: true
+      })))));
       break;  
     }
   }
