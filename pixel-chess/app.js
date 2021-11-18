@@ -7,6 +7,7 @@ const indexRouter = require("./routes/index");
 const Game = require("./game.js");
 const Status = require("./statTracker.js");
 const Message = require("./messages.js")
+const sqlite3 = require('sqlite3').verbose();
 
 const port = process.argv[2];
 const app = express();
@@ -20,12 +21,29 @@ app.get("/play", indexRouter);
 
 const wsServer = new ws.Server({port:8080});
 
+
+let db = new sqlite3.Database('./storage.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) =>{
+  if(err) {
+    console.error(err.message);
+  }
+  console.log("connected to db");
+});
+
+db.serialize(() => {
+  db.run('create table if not exists records(_id integer primary key, name text not null, value integer not null);');
+  db.run('update records set value=0 where _id=3;');
+  db.each('select * from records', (err, row) =>{
+    console.log(row._id + "|" + row.name + "|" + row.value);
+  });
+});
+
 var currentGames = new Map();
 var websockets = new Map();
 var connectionID = 0;
-var status = new Status();
+var status = new Status(db);
 var gamesInitialized = 0;
 var disconnected = 0;
+
 
 wsServer.on("connection", function(ws) {
   let con = ws;
@@ -163,6 +181,7 @@ wsServer.on("connection", function(ws) {
                 //check for GAME OVER after move
                 if (currentGame.getChess().game_over()) {
                   status.incCompleted();
+                  status.decStarted();
                   if (currentGame.getChess().in_checkmate()) {
                     if (con === currentGame.getWsWhite()) {
                       currentGame.setState("White");
@@ -186,6 +205,7 @@ wsServer.on("connection", function(ws) {
                 currentGame.getChess().in_threefold_repetition() || currentGame.getChess().insufficient_material()){
                   currentGame.setState("Draw");
                   status.incCompleted();
+                  status.decStarted();
                   currentGames.delete(currentGame.getId());
                   currentGame.getWsWhite().send(JSON.stringify(new Message("draw")));
                   currentGame.getWsBlack().send(JSON.stringify(new Message("draw")));
@@ -218,7 +238,6 @@ wsServer.on("connection", function(ws) {
 ws.on("close", function(code) {
     console.log(con.id + " has closed the connection" );
     let currentGame = websockets.get(con.id);
-
     if(currentGame.getState() != "Waiting") {
        if(con === currentGame.getWsWhite()) {
           currentGame.getWsBlack().send(JSON.stringify(new Message("opponentLeft")));
@@ -242,6 +261,8 @@ ws.on("close", function(code) {
 
     if(currentGame.getState() != "Started" && disconnected === 2){
       disconnected = 0;
+      status.decStarted();
+      status.incCompleted();
       console.log(currentGame.getState());
       currentGames.delete(currentGame.getId());
     }
