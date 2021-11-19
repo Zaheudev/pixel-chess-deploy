@@ -79,6 +79,17 @@ h1 {
     animation: TextAnim 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
 }
 
+p {
+  font-family: AncientModernTales;
+  font-size:3em;
+  text-align: center;
+  margin: auto;
+  user-select: none;
+
+  text-shadow: none;
+  animation: TextAnim 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+}
+
 .right-horse{
     position: absolute;
     right: 100px;

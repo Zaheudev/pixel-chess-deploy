@@ -17,6 +17,7 @@ app.set("views",path.join(__dirname, 'views'));
 app.set('view engine','ejs');
 
 app.get("/", indexRouter);
+app.get("/data", indexRouter);
 app.get("/play", indexRouter);
 
 const wsServer = new ws.Server({port:8080});
