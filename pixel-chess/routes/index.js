@@ -18,7 +18,6 @@ router.get('/data', function(req, res) {
     if(err) {
       console.error(err.message);
     }
-    console.log("REST API INCOMING");
     db.all('select * from records', (err, rows) =>{
       res.json(rows);
     });
