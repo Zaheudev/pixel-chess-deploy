@@ -1,6 +1,5 @@
-const HOST = location.origin.replace(/^http/, 'ws');
 // const client = new WebSocket("ws://localhost:8080");
-const client = new WebSocket(HOST);
+const client = new WebSocket("https://git.heroku.com/pixel-chess.git");
 
 const board = document.querySelector(".chess-board");
 const state = document.querySelector("#state h1");
