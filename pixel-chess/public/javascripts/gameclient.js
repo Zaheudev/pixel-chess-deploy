@@ -1,4 +1,6 @@
-const client = new WebSocket("ws://localhost:8080");
+const HOST = location.origin.replace(/^http/, 'ws');
+// const client = new WebSocket("ws://localhost:8080");
+const client = new WebSocket(HOST);
 
 const board = document.querySelector(".chess-board");
 const state = document.querySelector("#state h1");
